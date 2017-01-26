@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="primary_text_default_material_light">#de000000</color>
+    <color name="statusBarColor_1">#de000000</color>
+    <color name="primary_material_light">#00bcd4</color>
+    <color name="primary_dark_material_light">#0097a7</color>
+    <color name="accent_material_light">#00b8d4</color>
 </resources>
