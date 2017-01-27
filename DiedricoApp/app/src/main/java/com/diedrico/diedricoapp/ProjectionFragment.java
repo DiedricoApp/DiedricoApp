@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,17 +16,13 @@ import android.widget.ListView;
 import com.diedrico.diedricoapp.opengl.MyGLRenderer;
 import com.diedrico.diedricoapp.opengl.MyGLRendererCamera;
 import com.diedrico.diedricoapp.opengl.MyGLSurfaceView;
-import com.diedrico.diedricoapp.scrollabletabs.BaseFragment;
 import com.diedrico.diedricoapp.vector.Diedrico;
 
 
 /**
  * Created by amil101 on 12/08/16.
  */
-public class ProjectionFragment extends BaseFragment {
-
-    static final String TAG = "tag.ProjectionFragment";
-    private static final String FRICTION_PATTERN = "Current: %sF";
+public class ProjectionFragment extends Fragment {
 
     private GLSurfaceView mGLView;          //SurfaceView of OpenGL
     MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
@@ -40,6 +37,11 @@ public class ProjectionFragment extends BaseFragment {
 
     boolean pressed;            //if the OpenGL is pressed
     long currentTime;           //The time of the thread, for rotate the camera if the user don't press the screen
+
+
+    public ProjectionFragment(){
+        //Empty construct
+    }
 
     @Override
     public void onPause() {
@@ -56,17 +58,6 @@ public class ProjectionFragment extends BaseFragment {
             mGLView.onResume();
         }
     }
-
-    public static ProjectionFragment newInstance() {
-        final Bundle bundle = new Bundle();
-
-        final ProjectionFragment fragment = new ProjectionFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
-    private ListView mListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle sis) {
@@ -89,32 +80,10 @@ public class ProjectionFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle sis) {
-        super.onViewCreated(view, sis);
+    public static ProjectionFragment newInstance() {
+        final ProjectionFragment fragment = new ProjectionFragment();
 
-    }
-
-
-    @Override
-    public boolean canScrollVertically(int direction) {
-        return mListView != null && mListView.canScrollVertically(direction);
-    }
-
-    @Override
-    public void onFlingOver(int y, long duration) {
-        if (mListView != null) {
-            mListView.smoothScrollBy(y, (int) duration);
-        }
-    }
-    @Override
-    public CharSequence getTitle(Resources r) {
-        return r.getString(R.string.projection);
-    }
-
-    @Override
-    public String getSelfTag() {
-        return TAG;
+        return fragment;
     }
 
     public void threadTime(){
@@ -185,6 +154,5 @@ public class ProjectionFragment extends BaseFragment {
 
         mGLView.requestRender();
     }
-
 
 }

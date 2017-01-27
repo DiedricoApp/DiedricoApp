@@ -2,33 +2,29 @@ package com.diedrico.diedricoapp;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.diedrico.diedricoapp.scrollabletabs.BaseFragment;
-
 /**
  * Created by amil101 on 17/12/16.
  */
-public class ExplanationFragment extends BaseFragment {
+public class ExplanationFragment extends Fragment {
 
-    static final String TAG = "tag.ExplanationFragment";
     private int explanation = R.string.firtstext;
     TextView textView;
 
-    public static ExplanationFragment newInstance() {
-        final Bundle bundle = new Bundle();
-
-        final ExplanationFragment fragment = new ExplanationFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
+    public ExplanationFragment(){
+        //Required empty public construct
     }
 
-    private ListView mListView;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle sis) {
@@ -41,26 +37,10 @@ public class ExplanationFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    public CharSequence getTitle(Resources r) {
-        return r.getString(R.string.explanation);
-    }
+    public static ExplanationFragment newInstance() {
+        final ExplanationFragment fragment = new ExplanationFragment();
 
-    @Override
-    public String getSelfTag() {
-        return TAG;
-    }
-
-    @Override
-    public boolean canScrollVertically(int direction) {
-        return mListView != null && mListView.canScrollVertically(direction);
-    }
-
-    @Override
-    public void onFlingOver(int y, long duration) {
-        if (mListView != null) {
-            mListView.smoothScrollBy(y, (int) duration);
-        }
+        return fragment;
     }
 
     public void setExplanation(int exp){

@@ -1,48 +1,42 @@
 package com.diedrico.diedricoapp;
 
 import android.content.res.Resources;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 
-import com.diedrico.diedricoapp.scrollabletabs.BaseFragment;
-import com.diedrico.diedricoapp.scrollabletabs.FragmentPagerAdapterExt;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Dimitry Ivanov on 21.08.2015.
  */
-class ViewPagerAdapter extends FragmentPagerAdapterExt {
+class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final Resources mResources;
-    private final List<BaseFragment> mFragments;
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    public ViewPagerAdapter(FragmentManager fm, Resources r, List<BaseFragment> fragments) {
-        super(fm);
-        this.mResources = r;
-        this.mFragments = fragments;
+    public ViewPagerAdapter(FragmentManager manager) {
+        super(manager);
     }
 
     @Override
-    public BaseFragment getItem(int position) {
-        return mFragments.get(position);
+    public Fragment getItem(int position) {
+        return mFragmentList.get(position);
     }
 
     @Override
     public int getCount() {
-        return mFragments != null ? mFragments.size() : 0;
+        return mFragmentList.size();
     }
 
-    @Override
-    public String makeFragmentTag(int position) {
-        return mFragments.get(position).getSelfTag();
+    public void addFragment(Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mFragments.get(position).getTitle(mResources);
-    }
-
-    boolean canScrollVertically(int position, int direction) {
-        return getItem(position).canScrollVertically(direction);
+        return mFragmentTitleList.get(position);
     }
 }

@@ -1,37 +1,32 @@
-<ru.noties.scrollable.ScrollableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/app_bar_main"
-    tools:context="com.diedrico.diedricoapp.MainActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/scrollable_layout"
-    app:scrollable_autoMaxScroll="true"
-    app:scrollable_autoMaxScrollViewId="@+id/header"
-    app:scrollable_considerIdleMillis="125"
-    app:scrollable_friction="0.075"
-    app:scrollable_closeUpAnimationMillis="250"
-    app:scrollable_defaultCloseUp="true"
-    app:scrollable_scrollerFlywheel="false"
-    app:scrollable_closeUpAnimatorInterpolator="@android:anim/accelerate_decelerate_interpolator">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <com.diedrico.diedricoapp.TabsLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_tabs"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/tabs_height"
-            android:background="#000000"
-            android:id="@+id/tabs" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    </LinearLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill"/>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/tabs_height"
-        android:id="@+id/view_pager"/>
-</ru.noties.scrollable.ScrollableLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+</android.support.design.widget.CoordinatorLayout>
