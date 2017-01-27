@@ -74,9 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(explanationFragment = ExplanationFragment.newInstance(), "ONE");
-        adapter.addFragment(projectionFragment = ProjectionFragment.newInstance(), "TWO");
-        adapter.addFragment(diedricoFragment = DiedricoFragment.newInstance(), "THREE");
+        adapter.addFragment(projectionFragment = ProjectionFragment.newInstance(), "ONE");
+        adapter.addFragment(diedricoFragment = DiedricoFragment.newInstance(), "TWO");
+        adapter.addFragment(explanationFragment = ExplanationFragment.newInstance(), "THREE");
         viewPager.setAdapter(adapter);
     }
 
