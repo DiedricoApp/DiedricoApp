@@ -26,8 +26,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private static final String ARG_LAST_SCROLL_Y = "arg.LastScrollY";
-
     private Toolbar toolbarTabs;
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -36,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ProjectionFragment projectionFragment;
     DiedricoFragment diedricoFragment;
     ExplanationFragment explanationFragment;
-
-    CreateDiedrico createDiedrico;
 
     Diedrico diedrico;
 
