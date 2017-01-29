@@ -82,4 +82,39 @@
     <string name="representation">Representation</string>
     <string name="explanation">Explanation</string>
     <string name="profileLine">Profile line</string>
+
+
+    <string-array name="menu">
+        <item>start</item>
+        <item>proyections</item>
+        <item>typeOfLines</item>
+        <item>typeOfPlanes</item>
+        <item>camera</item>
+    </string-array>
+
+    <string-array name="start">
+        <item>Bienvenido</item>
+        <item>Componentes del sistema diedrico</item>
+        <item>Ejes</item>
+    </string-array>
+
+    <string-array name="proyections">
+        <item>Proyeccion de puntos</item>
+        <item>Proyeccion de lineas</item>
+    </string-array>
+
+    <string-array name="typeOfLines">
+        <item>Linea oblicua</item>
+        <item>Linea horizontal</item>
+        <item>Linea frontal</item>
+    </string-array>
+
+    <string-array name="typeOfPlanes">
+        <item>CrosswirdePlane</item>
+        <item>Plano horizontal</item>
+        <item>Plano frontal</item>
+        <item>Plano proyectante vertical</item>
+        <item>Plano de perfil</item>
+    </string-array>
+
 </resources>

@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ExpandableListView;
 
 import com.diedrico.diedricoapp.opengl.MyGLRenderer;
 import com.diedrico.diedricoapp.opengl.MyGLRendererEdges;
@@ -22,6 +23,8 @@ import com.diedrico.diedricoapp.vector.PlaneVector;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -30,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    List<String> header;
+    HashMap<String, List<String>> listDataChild;
 
     ProjectionFragment projectionFragment;
     DiedricoFragment diedricoFragment;
@@ -52,8 +59,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
 
+
+        //Prepare the navigation view with the expandable ListView
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_tabs_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        expListView = (ExpandableListView) findViewById(R.id.expandableListView);
+
+        prepareExapandableListNavigationView();     //To load the lists
+
+        listAdapter = new ExpandableListAdapter(this, header, listDataChild);
+        expListView.setAdapter(listAdapter);
 
         //The toolbar for the tabs
         toolbarTabs = (Toolbar) findViewById(R.id.toolbar_tabs);
@@ -366,5 +382,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private void prepareExapandableListNavigationView(){
+        header = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+
+        //Adding child data
+        header = Arrays.asList(getResources().getStringArray(R.array.menu));
+
+        listDataChild.put(header.get(0), Arrays.asList(getResources().getStringArray(R.array.start)));  //Header, Child data
+        listDataChild.put(header.get(1), Arrays.asList(getResources().getStringArray(R.array.proyections)));
+        listDataChild.put(header.get(2), Arrays.asList(getResources().getStringArray(R.array.typeOfLines)));
+        listDataChild.put(header.get(3), Arrays.asList(getResources().getStringArray(R.array.typeOfPlanes)));
+    }
 
 }

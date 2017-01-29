@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <item android:title="@string/getStarted">
-        <menu>
-            <item android:id="@+id/welcome" android:title="@string/welcome" />
-            <item android:id="@+id/components" android:title="@string/components"/>
-            <item android:id="@+id/edges" android:title="@string/edges" />
-        </menu>
-    </item>
+    <group android:id="@+id/getStarted"
+        android:title="@string/getStarted">
+        <item android:id="@+id/welcome" android:title="@string/welcome" />
+        <item android:id="@+id/components" android:title="@string/components"/>
+        <item android:id="@+id/edges" android:title="@string/edges" />
+    </group>
 
     <item android:title="@string/projections">
         <menu>
