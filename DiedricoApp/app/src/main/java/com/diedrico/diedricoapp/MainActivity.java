@@ -389,8 +389,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Adding child data
         header = Arrays.asList(getResources().getStringArray(R.array.menu));
 
-        listDataChild.put(header.get(0), Arrays.asList(getResources().getStringArray(R.array.start)));  //Header, Child data
-        listDataChild.put(header.get(1), Arrays.asList(getResources().getStringArray(R.array.proyections)));
+        listDataChild.put(header.get(0), Arrays.asList(getResources().getStringArray(R.array.getStarted)));  //Header, Child data
+        listDataChild.put(header.get(1), Arrays.asList(getResources().getStringArray(R.array.projections)));
         listDataChild.put(header.get(2), Arrays.asList(getResources().getStringArray(R.array.typeOfLines)));
         listDataChild.put(header.get(3), Arrays.asList(getResources().getStringArray(R.array.typeOfPlanes)));
     }

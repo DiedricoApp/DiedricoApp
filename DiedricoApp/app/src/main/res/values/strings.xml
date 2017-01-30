@@ -22,7 +22,6 @@
     <string name="process">Process</string>
     <string name="title_activity_menu_prueba" translatable="false">MenuPrueba</string>
     <string name="getStarted">Get Started</string>
-    <string name="welcome">Welcome</string>
     <string name="edges">Edges</string>
     <string name="projections">Projections</string>
     <string name="pointProjection">Point projection</string>
@@ -68,7 +67,6 @@
     <string name="groundLineParallelPlaneInfo">Only in spanish</string>
     <string name="profilePlaneInfo">Only in spanish</string>
     <string name="groundLineCuttedPlaneInfo">Only in spanish</string>
-    <string name="components">Descriptive geometry components</string>
     <string name="componentsInfo">Only in spanish</string>
     <string name="infoCamara">With a photo you can pass it to 3D! \r\n  You only have to take a pic and set de values of the lines</string>
     <string name="landLine">Land Line</string>
@@ -85,36 +83,43 @@
 
 
     <string-array name="menu">
-        <item>start</item>
-        <item>proyections</item>
-        <item>typeOfLines</item>
-        <item>typeOfPlanes</item>
-        <item>camera</item>
+        <item>@string/getStarted</item>
+        <item>@string/projections</item>
+        <item>@string/typeOfLines</item>
+        <item>@string/typeOfPlanes</item>
+        <item>@string/camera</item>
     </string-array>
 
-    <string-array name="start">
-        <item>Bienvenido</item>
-        <item>Componentes del sistema diedrico</item>
-        <item>Ejes</item>
+    <string-array name="getStarted">
+        <item>@string/welcome</item>
+        <item>@string/components</item>
+        <item>@string/edges</item>
     </string-array>
 
-    <string-array name="proyections">
-        <item>Proyeccion de puntos</item>
-        <item>Proyeccion de lineas</item>
+    <string-array name="projections">
+        <item>@string/pointProjection</item>
+        <item>@string/lineProjection</item>
     </string-array>
 
     <string-array name="typeOfLines">
-        <item>Linea oblicua</item>
-        <item>Linea horizontal</item>
-        <item>Linea frontal</item>
+        <item>@string/crosswideLine</item>
+        <item>@string/horizontalLine</item>
+        <item>@string/frontalLine</item>
+        <item>@string/rigidLine</item>
+        <item>@string/verticalLine</item>
+        <item>@string/groundLineParallelLine</item>
+        <item>@string/groundLineCuttedLine</item>
     </string-array>
 
     <string-array name="typeOfPlanes">
-        <item>CrosswirdePlane</item>
-        <item>Plano horizontal</item>
-        <item>Plano frontal</item>
-        <item>Plano proyectante vertical</item>
-        <item>Plano de perfil</item>
+        <item>@string/crosswidePlane</item>
+        <item>@string/horizontalPlane</item>
+        <item>@string/frontalPlane</item>
+        <item>@string/horizontalProjectionPlane</item>
+        <item>@string/verticalProjectionPlane</item>
+        <item>@string/groundLineParallelPlane</item>
+        <item>@string/groundLineCuttedPlane</item>
+        <item>@string/profilePlane</item>
     </string-array>
 
 </resources>
