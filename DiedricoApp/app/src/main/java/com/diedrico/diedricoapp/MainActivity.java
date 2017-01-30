@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+/*
         if (id == R.id.welcome) {
             diedrico = new Diedrico(null, null, null);
 
@@ -375,12 +375,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             explanationFragment.setExplanation(R.string.groundLineCuttedPlaneInfo);
             explanationFragment.newInstance();
         }
+
+        */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_tabs_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
 
     }
+
+
 
     private void prepareExapandableListNavigationView(){
         header = new ArrayList<String>();
