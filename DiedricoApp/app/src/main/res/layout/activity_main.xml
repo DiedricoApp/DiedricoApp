@@ -16,7 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:id="@+id/expandableListView"
-            android:indicatorRight="500dp">
+            android:indicatorRight="500dp"
+            android:childDivider="#00FFFFFF">
         </ExpandableListView>
     </android.support.design.widget.NavigationView>
 
