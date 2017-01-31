@@ -108,6 +108,7 @@
         <item>@string/rigidLine</item>
         <item>@string/verticalLine</item>
         <item>@string/groundLineParallelLine</item>
+        <item>@string/profileLine</item>
         <item>@string/groundLineCuttedLine</item>
     </string-array>
 
