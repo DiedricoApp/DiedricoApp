@@ -3,6 +3,7 @@ package com.diedrico.diedricoapp;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,11 @@ public class ExplanationFragment extends Fragment {
     public void setExplanation(int title, int exp){
         this.title = title;
         this.explanation = exp;
-    }
 
+        if(super.isVisible()){
+            textViewTitle.setText(title);
+            textViewExplanation.setText(explanation);
+        }
+
+    }
 }
