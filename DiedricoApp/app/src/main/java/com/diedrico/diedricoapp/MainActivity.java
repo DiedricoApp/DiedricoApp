@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    DrawerLayout drawer;        //The Navigation View
+
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> header;
@@ -55,11 +58,11 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         //Now we have to put the button in the toolbar and setup the NavigationView
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_tabs_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_tabs_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
-        
+
         expListView = (ExpandableListView) findViewById(R.id.expandableListView);
 
         prepareExapandableListNavigationView();     //To load the lists
@@ -258,6 +261,8 @@ public class MainActivity extends AppCompatActivity{
                 projectionFragment.newInstance();
 
                 diedricoFragment.setDiedrico(diedrico);
+
+                drawer.closeDrawer(GravityCompat.START);        //Closing the navigation View
 
                 return false;
             }
