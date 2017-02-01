@@ -14,8 +14,10 @@ import android.widget.TextView;
  */
 public class ExplanationFragment extends Fragment {
 
+    private int title = R.string.welcome;
     private int explanation = R.string.firtstext;
-    TextView textView;
+    TextView textViewTitle;
+    TextView textViewExplanation;
 
     public ExplanationFragment(){
         //Required empty public construct
@@ -31,8 +33,10 @@ public class ExplanationFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_explanation, parent, false);
 
-        textView = (TextView) view.findViewById(R.id.explanationText);
-        textView.setText(explanation);
+        textViewTitle = (TextView) view.findViewById(R.id.explanationTitle);
+        textViewExplanation = (TextView) view.findViewById(R.id.explanationText);
+        textViewTitle.setText(title);
+        textViewExplanation.setText(explanation);
 
         return view;
     }
@@ -43,7 +47,8 @@ public class ExplanationFragment extends Fragment {
         return fragment;
     }
 
-    public void setExplanation(int exp){
+    public void setExplanation(int title, int exp){
+        this.title = title;
         this.explanation = exp;
     }
 
