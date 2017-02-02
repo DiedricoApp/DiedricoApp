@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity{
         //Prepare the ListView, load the items from itemsListView
 
         listView = (ListView) findViewById(R.id.listView);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_item_list_view, R.id.label, itemsListView);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.group_expandable, R.id.expandableGroupText, itemsListView);
         listView.setAdapter(arrayAdapter);
 
         //The toolbar for the tabs
