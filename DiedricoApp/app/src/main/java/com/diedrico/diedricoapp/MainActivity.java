@@ -102,9 +102,9 @@ public class MainActivity extends AppCompatActivity{
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(projectionFragment = ProjectionFragment.newInstance(), "ONE");
-        adapter.addFragment(diedricoFragment = DiedricoFragment.newInstance(), "TWO");
-        adapter.addFragment(explanationFragment = ExplanationFragment.newInstance(), "THREE");
+        adapter.addFragment(projectionFragment = ProjectionFragment.newInstance(), "Espacio");
+        adapter.addFragment(diedricoFragment = DiedricoFragment.newInstance(), "Diédrico");
+        adapter.addFragment(explanationFragment = ExplanationFragment.newInstance(), "Explicacion");
         viewPager.setAdapter(adapter);
     }
 
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity{
         listDataChild.put(header.get(2), Arrays.asList(getResources().getStringArray(R.array.typeOfLines)));
         listDataChild.put(header.get(3), Arrays.asList(getResources().getStringArray(R.array.typeOfPlanes)));
 
-        itemsListView.add(getResources().getString(R.string.camera));       //Add the camera view for ListView, the reason is that cameraView is no expandable but it must be in the nav view
+        itemsListView.add(this.getString(R.string.camera));       //Add the camera view for ListView, the reason is that cameraView is no expandable but it must be in the nav view
     }
 
 }

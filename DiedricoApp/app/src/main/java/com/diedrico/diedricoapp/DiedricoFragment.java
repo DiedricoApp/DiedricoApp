@@ -50,17 +50,14 @@ public class DiedricoFragment extends Fragment {
     public void setDiedrico(Diedrico diedrico){
         if(!diedrico.getPoints().isEmpty()){
             this.createDiedrico.addDiedricoPoints(diedrico.getPoints());
-            Log.i("asd", "afds");
         }
 
         if(!diedrico.getLines().isEmpty()){
             this.createDiedrico.addDiedricoLines(diedrico.getLines());
-            Log.i("asd", "afds");
         }
 
         if(!diedrico.getPlanes().isEmpty()){
             this.createDiedrico.addPlanes(diedrico.getPlanes());
-            Log.i("asd", "afds");
         }
     }
 }
