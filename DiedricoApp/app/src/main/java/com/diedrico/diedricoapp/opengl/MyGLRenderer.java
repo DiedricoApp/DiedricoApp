@@ -10,6 +10,7 @@ import com.diedrico.diedricoapp.opengl.models.Line;
 import com.diedrico.diedricoapp.opengl.models.ProyectionPlane;
 
 import com.diedrico.diedricoapp.vector.Diedrico;
+import com.diedrico.diedricoapp.vector.LineVector;
 import com.diedrico.diedricoapp.vector.PointVector;
 
 import java.util.ArrayList;
@@ -31,21 +32,22 @@ public class MyGLRenderer extends MyGLRendererCamera {
     private final float[] mViewMatrix = new float[16];
     private final float[] mRotationMatrix = new float[16];
     private final float[] mTranslationMatrix = new float[16];
-    float color[] = {0.0f, 0.0f, 0.0f, 1.0f};
+    private final float color[] = {0.0f, 0.0f, 0.0f, 1.0f};
+    private final float greenColor[] = { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
 
-    static float squareCoords[] = {
+    final float squareCoords[] = {
             -1.0f,  0.0f, 0.5f,   // top left
             1.0f, 0.0f, 0.5f,   // bottom left
             1.0f, 0.0f, -0.5f,   // bottom right
             -1.0f,  0.0f, -0.5f }; // top right
 
-    static float squareCoords2[] = {
+    final float squareCoords2[] = {
             0.0f,  1.0f, 0.5f,   // top left
             0.0f, -1.0f, 0.5f,   // bottom left
             0.0f, -1.0f, -0.5f,   // bottom right
             0.0f,  1.0f, -0.5f }; // top right
 
-
+    Line coordsIntersection;
     Diedrico diedrico;
 
     List<PointVector> points = new ArrayList<>();      //To handle the position of the points
@@ -74,6 +76,7 @@ public class MyGLRenderer extends MyGLRendererCamera {
         // initialize a triangle
         mAxis = new Axis(squareCoords);
         mAxis2 = new Axis(squareCoords2);
+        coordsIntersection = new Line(new LineVector(0.0f, 0.0f, -0.5f, 0.0f, 0.0f, 0.5f), greenColor);
 
         if(diedrico.getPoints() != null){           //Points are a quite different, they must be created and then we change the position.
             points.addAll(diedrico.getPoints());        //To handle the position
@@ -158,6 +161,7 @@ public class MyGLRenderer extends MyGLRendererCamera {
         // Draw shape
         mAxis.draw(scratch);
         mAxis2.draw(scratch);
+        coordsIntersection.draw(scratch);
 
         for(int i = 0; i < points.size(); i++){
             Matrix.setIdentityM(mTranslationMatrix, 0);
