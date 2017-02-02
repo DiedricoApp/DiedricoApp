@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity{
         listView = (ListView) findViewById(R.id.listView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.group_expandable, R.id.expandableGroupText, itemsListView);
         listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(onListViewItemListener());
 
         //The toolbar for the tabs
         toolbarTabs = (Toolbar) findViewById(R.id.toolbar_tabs);
@@ -254,6 +257,19 @@ public class MainActivity extends AppCompatActivity{
                 drawer.closeDrawer(GravityCompat.START);        //Closing the navigation View
 
                 return false;
+            }
+        };
+    }
+
+    private AdapterView.OnItemClickListener onListViewItemListener(){
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int item, long l) {
+                switch (item){
+                    case 0:
+                        //The first item of listView
+                        break;
+                }
             }
         };
     }
