@@ -87,7 +87,6 @@
         <item>@string/projections</item>
         <item>@string/typeOfLines</item>
         <item>@string/typeOfPlanes</item>
-        <item>@string/camera</item>
     </string-array>
 
     <string-array name="getStarted">

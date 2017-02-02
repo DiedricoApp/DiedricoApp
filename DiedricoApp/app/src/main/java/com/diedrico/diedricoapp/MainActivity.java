@@ -1,5 +1,6 @@
 package com.diedrico.diedricoapp;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 
@@ -14,7 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.diedrico.diedricoapp.opengl.MyGLRenderer;
 import com.diedrico.diedricoapp.opengl.MyGLRendererEdges;
@@ -37,11 +40,14 @@ public class MainActivity extends AppCompatActivity{
     private ViewPager viewPager;
     DrawerLayout drawer;        //The Navigation View
 
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> header;
-    HashMap<String, List<String>> listDataChild;
+    ExpandableListAdapter listAdapter;      //adapter of listExpandable, its a custom adapter
+    ExpandableListView expListView;     //To access the expandable list View
+    List<String> header;        //List of items that are expandable
+    HashMap<String, List<String>> listDataChild;        //Childs of the expandable
+    ListView listView;      //To put the lists that are not expandable
+    List<String> itemsListView;     //Items that are not expandable
 
+    //Fragments
     ProjectionFragment projectionFragment;
     DiedricoFragment diedricoFragment;
     ExplanationFragment explanationFragment;
@@ -70,6 +76,13 @@ public class MainActivity extends AppCompatActivity{
         listAdapter = new ExpandableListAdapter(this, header, listDataChild);
         expListView.setAdapter(listAdapter);
         expListView.setOnChildClickListener(onExpandableClick());
+
+
+        //Prepare the ListView, load the items from itemsListView
+
+        listView = (ListView) findViewById(R.id.listView);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_item_list_view, R.id.label, itemsListView);
+        listView.setAdapter(arrayAdapter);
 
         //The toolbar for the tabs
         toolbarTabs = (Toolbar) findViewById(R.id.toolbar_tabs);
@@ -191,22 +204,22 @@ public class MainActivity extends AppCompatActivity{
                                 explanationFragment.setExplanation(R.string.crosswidePlane, R.string.crosswidePlanoInfo);
                                 break;
                             case 1:     //the user pressed horizontal plane
-                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.5f, -0.5f),  new PointVector(0.0f, 0.5f, 0.5f), new PointVector(0.9f, 0.5f, 0.5f),new PointVector(0.9f, 0.5f, -0.5f)));
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.5f, -0.5f), new PointVector(0.0f, 0.5f, 0.5f), new PointVector(0.9f, 0.5f, 0.5f), new PointVector(0.9f, 0.5f, -0.5f)));
 
                                 explanationFragment.setExplanation(R.string.horizontalPlane, R.string.horizontalPlaneInfo);
                                 break;
                             case 2:     //the user pressed frontal plane
                                 planeVectors.add(new PlaneVector(new PointVector(0.5f, 0.0f, 0.5f), new PointVector(0.5f, 0.0f, -0.5f), new PointVector(0.5f, 1.0f, -0.5f), new PointVector(0.5f, 1.0f, 0.5f)));
 
-                                explanationFragment.setExplanation(R.string.frontalPlane,R.string.frontalPlaneInfo);
+                                explanationFragment.setExplanation(R.string.frontalPlane, R.string.frontalPlaneInfo);
                                 break;
                             case 3:     //the user pressed horizontal projection plane
-                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 1.0f, 0.4f) ,new PointVector(0.0f, 0.0f, 0.4f), new PointVector(0.5f, 0.0f, -0.5f), new PointVector(0.5f, 1.0f, -0.5f)));
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 1.0f, 0.4f), new PointVector(0.0f, 0.0f, 0.4f), new PointVector(0.5f, 0.0f, -0.5f), new PointVector(0.5f, 1.0f, -0.5f)));
 
                                 explanationFragment.setExplanation(R.string.horizontalProjectionPlane, R.string.horizontalProjectionPlaneInfo);
                                 break;
                             case 4:     //the user pressed vertical projection plane
-                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.0f, 0.4f), new PointVector(0.0f, 1.0f,-0.5f), new PointVector(1.0f, 1.0f , -0.5f), new PointVector(1.0f, 0.0f, 0.4f)));
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.0f, 0.4f), new PointVector(0.0f, 1.0f, -0.5f), new PointVector(1.0f, 1.0f, -0.5f), new PointVector(1.0f, 0.0f, 0.4f)));
 
                                 explanationFragment.setExplanation(R.string.verticalProjectionPlane, R.string.verticalProjectionPlaneInfo);
                                 break;
@@ -248,6 +261,7 @@ public class MainActivity extends AppCompatActivity{
     private void prepareExapandableListNavigationView(){
         header = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
+        itemsListView = new ArrayList<>();
 
         //Adding child data
         header = Arrays.asList(getResources().getStringArray(R.array.menu));
@@ -256,6 +270,8 @@ public class MainActivity extends AppCompatActivity{
         listDataChild.put(header.get(1), Arrays.asList(getResources().getStringArray(R.array.projections)));
         listDataChild.put(header.get(2), Arrays.asList(getResources().getStringArray(R.array.typeOfLines)));
         listDataChild.put(header.get(3), Arrays.asList(getResources().getStringArray(R.array.typeOfPlanes)));
+
+        itemsListView.add(getResources().getString(R.string.camera));       //Add the camera view for ListView, the reason is that cameraView is no expandable but it must be in the nav view
     }
 
 }
