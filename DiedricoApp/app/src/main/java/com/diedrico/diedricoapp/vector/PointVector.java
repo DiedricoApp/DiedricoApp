@@ -27,7 +27,6 @@ public class PointVector implements Parcelable {
         public PointVector createFromParcel(Parcel in) {
             return new PointVector(in);
         }
-
         public PointVector[] newArray(int size) {
             return new PointVector[size];
         }
@@ -48,8 +47,12 @@ public class PointVector implements Parcelable {
         this.pointZ = pointZ;
     }
 
-    public float getPointX() {
+    public PointVector(float pointX, float pointY){
+        this.pointX = pointX;
+        this.pointY = pointY;
+    }
 
+    public float getPointX() {
         return pointX;
     }
 

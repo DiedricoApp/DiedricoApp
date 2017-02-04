@@ -56,6 +56,14 @@ public class LineVector implements Parcelable {
 
     }
 
+    public LineVector(float LineYA, float LineXA, float LineYB, float LineXB){
+
+        this.LineYA = LineYA;
+        this.LineXA = LineXA;
+
+        this.LineYB = LineYB;
+        this.LineXB = LineXB;
+    }
     public LineVector(float LineYA, float LineXA, float LineZA, float LineYB, float LineXB, float LineZB){
 
         this.LineYA = LineYA;
