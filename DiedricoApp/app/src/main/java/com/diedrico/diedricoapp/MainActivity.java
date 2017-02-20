@@ -1,5 +1,6 @@
 package com.diedrico.diedricoapp;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -267,11 +268,17 @@ public class MainActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> adapterView, View view, int item, long l) {
                 switch (item){
                     case 0:
-                        //The first item of listView
+                        //The first item of listView, the camera
+                        startCameraActivity();
                         break;
                 }
             }
         };
+    }
+
+    private void startCameraActivity(){
+        Intent intent = new Intent(this, CameraActivity.class);
+        this.startActivity(intent);
     }
 
     private void prepareExapandableListNavigationView(){
