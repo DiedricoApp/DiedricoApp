@@ -28,6 +28,10 @@
             android:name=".CameraActivity"
             android:theme="@style/AppTheme" >
         </activity>
+        <activity
+            android:name=".PicMenuActivity"
+            android:theme="@style/NoActionBarModified" >
+        </activity>
     </application>
 
 </manifest>
