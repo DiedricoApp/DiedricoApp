@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true">
+    android:layout_height="match_parent" android:fitsSystemWindows="true" android:id="@+id/coordinatorLayout">
 
     <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
         android:layout_width="match_parent" android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -14,6 +14,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <!--
+                The content of the app must be here. When the activities are created we inflate the content with InflaterLayout.
+                This is because, at this point, in the activity there is the toolbar and the NavigationView, so is better reusing this code
+                and import the layouts we want to show.
+
+                If not, then include like this way:
+                <include layout="@layout/content_main" />
+
+    -->
 
 </android.support.design.widget.CoordinatorLayout>

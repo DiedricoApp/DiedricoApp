@@ -1,8 +1,10 @@
 package com.diedrico.diedricoapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 
 import android.support.design.widget.TabLayout;
@@ -14,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity{
     private TabLayout tabLayout;
     private ViewPager viewPager;
     DrawerLayout drawer;        //The Navigation View
+    private CoordinatorLayout coordinatorLayout;        //The layout with the tabLayout, we need to inflate the content we want to show
 
     ExpandableListAdapter listAdapter;      //adapter of listExpandable, its a custom adapter
     ExpandableListView expListView;     //To access the expandable list View
@@ -60,6 +64,12 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Inflate the content in the coordinator layout
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        LayoutInflater inflater = (LayoutInflater)this.getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.content_main, coordinatorLayout);
 
         //The toolbar of the app
         toolbar = (Toolbar) findViewById(R.id.toolbar);
