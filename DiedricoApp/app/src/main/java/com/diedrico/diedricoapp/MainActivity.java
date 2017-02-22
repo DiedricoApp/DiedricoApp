@@ -102,8 +102,6 @@ public class MainActivity extends AppCompatActivity{
         toolbarTabs = (Toolbar) findViewById(R.id.toolbar_tabs);
         setSupportActionBar(toolbarTabs);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 

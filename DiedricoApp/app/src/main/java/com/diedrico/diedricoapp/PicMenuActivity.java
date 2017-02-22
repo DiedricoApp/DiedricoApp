@@ -5,16 +5,23 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -28,6 +35,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -36,6 +45,17 @@ import java.util.List;
  */
 public class PicMenuActivity extends AppCompatActivity {
     Context context;
+
+    private Toolbar toolbar;
+    DrawerLayout drawer;        //The Navigation View
+    private CoordinatorLayout coordinatorLayout;        //The layout with the tabLayout, we need to inflate the content we want to show
+
+    ExpandableListAdapter listAdapter;      //adapter of listExpandable, its a custom adapter
+    ExpandableListView expListView;     //To access the expandable list View
+    List<String> header;        //List of items that are expandable
+    HashMap<String, List<String>> listDataChild;        //Childs of the expandable
+    ListView listView;      //To put the lists that are not expandable
+    List<String> itemsListView;     //Items that are not expandable
 
     android.widget.ImageView ImageView;                                //the imageView where  be placed the picture
     String file;                                        //picture file name
@@ -84,7 +104,43 @@ public class PicMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_pic_menu);
+        setContentView(R.layout.activity_main);
+
+        //Inflate the content in the coordinator layout
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        LayoutInflater inflater = (LayoutInflater)this.getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.content_pic_menu, coordinatorLayout);
+
+        //The toolbar of the app
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        //Now we have to put the button in the toolbar and setup the NavigationView
+        drawer = (DrawerLayout) findViewById(R.id.drawer_tabs_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.syncState();
+
+        expListView = (ExpandableListView) findViewById(R.id.expandableListView);
+
+        prepareExapandableListNavigationView();     //To load the lists
+
+        listAdapter = new ExpandableListAdapter(this, header, listDataChild);
+        expListView.setAdapter(listAdapter);
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
+                return false;
+            }
+        });
+
+        //Prepare the ListView, load the items from itemsListView
+        listView = (ListView) findViewById(R.id.listView);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.group_expandable, R.id.expandableGroupText, itemsListView);
+        listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(onListViewItemListener());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -150,7 +206,7 @@ public class PicMenuActivity extends AppCompatActivity {
         //menuColor.setAdapter(menuColorArrayAdapter);
     }
 
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -401,9 +457,10 @@ public class PicMenuActivity extends AppCompatActivity {
             }
         });
 
-        */
+
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -534,6 +591,52 @@ public class PicMenuActivity extends AppCompatActivity {
     }
 
     */
+
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_tabs_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void prepareExapandableListNavigationView(){
+        header = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+        itemsListView = new ArrayList<>();
+
+        //Adding child data
+        header = Arrays.asList(getResources().getStringArray(R.array.menu));
+
+        listDataChild.put(header.get(0), Arrays.asList(getResources().getStringArray(R.array.getStarted)));  //Header, Child data
+        listDataChild.put(header.get(1), Arrays.asList(getResources().getStringArray(R.array.projections)));
+        listDataChild.put(header.get(2), Arrays.asList(getResources().getStringArray(R.array.typeOfLines)));
+        listDataChild.put(header.get(3), Arrays.asList(getResources().getStringArray(R.array.typeOfPlanes)));
+
+        itemsListView.add(this.getString(R.string.camera));       //Add the camera view for ListView, the reason is that cameraView is no expandable but it must be in the nav view
+    }
+
+    private AdapterView.OnItemClickListener onListViewItemListener(){
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int item, long l) {
+                switch (item){
+                    case 0:
+                        //The first item of listView, the camera
+                        startCameraActivity();
+                        break;
+                }
+            }
+        };
+    }
+
+    private void startCameraActivity(){
+        Intent intent = new Intent(this, CameraActivity.class);
+        this.startActivity(intent);
+    }
 
     private void copyFile(String inputFile, String outputPath) {
 
