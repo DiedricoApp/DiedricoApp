@@ -2,22 +2,17 @@ package com.diedrico.diedricoapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +20,6 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.diedrico.diedricoapp.opengl.MyGLRenderer;
-import com.diedrico.diedricoapp.opengl.MyGLRendererEdges;
 import com.diedrico.diedricoapp.vector.Diedrico;
 import com.diedrico.diedricoapp.vector.PointVector;
 import com.diedrico.diedricoapp.vector.LineVector;
@@ -79,6 +73,7 @@ public class MainActivity extends AppCompatActivity{
         drawer = (DrawerLayout) findViewById(R.id.drawer_tabs_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         expListView = (ExpandableListView) findViewById(R.id.expandableListView);

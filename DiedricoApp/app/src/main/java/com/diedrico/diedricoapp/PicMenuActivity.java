@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,8 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -120,6 +117,7 @@ public class PicMenuActivity extends AppCompatActivity {
         drawer = (DrawerLayout) findViewById(R.id.drawer_tabs_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         expListView = (ExpandableListView) findViewById(R.id.expandableListView);
@@ -142,8 +140,6 @@ public class PicMenuActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener(onListViewItemListener());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         context = this;
         Intent intent = getIntent();
@@ -205,12 +201,12 @@ public class PicMenuActivity extends AppCompatActivity {
         //menuColorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //menuColor.setAdapter(menuColorArrayAdapter);
     }
-
 /*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        /*
+
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.preview_menu_topmenu, menu);
@@ -461,7 +457,6 @@ public class PicMenuActivity extends AppCompatActivity {
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -473,7 +468,7 @@ public class PicMenuActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-/*
+
     AdapterView.OnItemSelectedListener onMenuNumberPointSelectedListener(Point selectedPoint) {
 
         menuNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
