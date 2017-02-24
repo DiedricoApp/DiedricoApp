@@ -26,21 +26,17 @@ public class Thresholding extends AsyncTask<String,Integer,Bitmap> {
 
     @Override
     protected Bitmap doInBackground(String... params) {
-
-        Bitmap image = BitmapFactory.decodeFile(params[0]);
-
-        Bitmap image2 = Bitmap.createScaledBitmap(image, 500, 500, false);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(params[0]), 500, 500, false);      //Scale the bitmap to not crash
 
         // convert into a usable format
-        ImageFloat32 input = ConvertBitmap.bitmapToGray(image2,(ImageFloat32) null,null);                    //(image, null, ImageFloat32.class);
+        ImageFloat32 input = ConvertBitmap.bitmapToGray(scaledBitmap,(ImageFloat32) null,null);                    //(image, null, ImageFloat32.class);
 
         ImageUInt8 binary = new ImageUInt8(input.width,input.height);
 
         GThresholdImageOps.localSauvola(input, binary, progress, 0.3f, false);
-        VisualizeImageData.binaryToBitmap(binary, false, image2, null);
+        VisualizeImageData.binaryToBitmap(binary, false, scaledBitmap, null);
 
-        image = image2;
-        return image;
+        return scaledBitmap;
     }
 
     public Thresholding(ImageView imageView, int progress) {
