@@ -17,7 +17,7 @@ import com.diedrico.diedricoapp.vector.Diedrico;
  */
 public class DiedricoFragment extends Fragment {
 
-    ImageView diedrico;            //ImageView
+    ImageView diedrico;            //imageView
     CreateDiedrico createDiedrico;      //For changing the pictures of the imageView
 
     public DiedricoFragment(){

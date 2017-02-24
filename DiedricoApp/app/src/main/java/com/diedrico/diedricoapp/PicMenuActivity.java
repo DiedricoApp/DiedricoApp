@@ -53,7 +53,7 @@ public class PicMenuActivity extends AppCompatActivity {
     ListView listView;      //To put the lists that are not expandable
     List<String> itemsListView;     //Items that are not expandable
 
-    android.widget.ImageView ImageView;                                //the imageView where  be placed the picture
+    android.widget.ImageView imageView;                                //the imageView where  be placed the picture
     String copyOfFile;                                        //Copy of the original file
     Bitmap bmImg;                                        //Bitmap of the picture
     Thresholding thresholding;                             //object of thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
@@ -142,13 +142,12 @@ public class PicMenuActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String originalFile = intent.getStringExtra("file");    //we receive te file of the picture
         copyOfFile = originalFile.substring(0, originalFile.length() - 4) + "2.jpg";        //The path where we will copy the file
-
         copyFile(originalFile, copyOfFile);                                                                   //we have to copy the picture for modifying with BOOFCV
 
-        ImageView = (android.widget.ImageView) findViewById(R.id.imagePreview);                                              //the ImageView
-        bmImg = BitmapFactory.decodeFile(copyOfFile);                                                         //We convert the file to Bitmap, for BoofCV
+        imageView = (android.widget.ImageView) findViewById(R.id.imagePreview);                                              //the imageView
 
-        thresholding = new Thresholding(ImageView, 1);                                                   //We modify the picture first for not crashing
+        bmImg = BitmapFactory.decodeFile(copyOfFile);                                                         //We convert the file to Bitmap, for BoofCV
+        thresholding = new Thresholding(imageView, 1);                                                   //We modify the picture first for not crashing
         thresholding.execute(copyOfFile);
 
         seekBar = (SeekBar) findViewById(R.id.seekBar);                                                 //our SeekBar
@@ -166,7 +165,7 @@ public class PicMenuActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
-                thresholding = new Thresholding(ImageView, radiousSeekBar);                                                   //We pass the image to a filter to where blacks are more blacks and whites more whites
+                thresholding = new Thresholding(imageView, radiousSeekBar);                                                   //We pass the image to a filter to where blacks are more blacks and whites more whites
                 thresholding.execute(copyOfFile);
             }
         });
@@ -213,8 +212,8 @@ public class PicMenuActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                Bitmap picBM = thresholding.getPic();
-                lineSegment = new LineSegment(getApplicationContext(), ImageView, getnPoints(), menuType, new LineSegment.AsyncResponse() {
+                Bitmap picBM = thresholding.getImageView();
+                lineSegment = new LineSegment(getApplicationContext(), imageView, getnPoints(), menuType, new LineSegment.AsyncResponse() {
                     @Override
                     public void processFinish(List<Point> points, List<Line> lines, List<Double> planes) {
 
@@ -289,7 +288,7 @@ public class PicMenuActivity extends AppCompatActivity {
                                     if ((position - 1) >= 0 && position < ((nPoints * 2) + 1) && position < ((nPoints * 2) + (nLines * 2) + 1) && (position - 1) % 2 == 0) {                        //if it the Y of a point
                                         menuNumber.setAdapter(menuPointArrayAdapter);                                       //we put menuNumber with the interesting points
                                         menuNumber.setOnItemSelectedListener(onMenuNumberPointSelectedListener(pointY.get((position - nLines) / 2)));            //we set the listener
-                                        new ListenPoint(ImageView, Bitmap.createBitmap(lineSegment.getPic()), pointY.get((position - 1) / 2));                                  // we change the color of the point that was selected in pointY
+                                        new ListenPoint(imageView, Bitmap.createBitmap(lineSegment.getImageView()), pointY.get((position - 1) / 2));                                  // we change the color of the point that was selected in pointY
 
                                         typeOfPoint = 0;                                                                    //what type it is, for later with the other spinner specify the point
                                         numberOfPoint = (position - 1) / 2;                                                  //what number of point it is
@@ -297,7 +296,7 @@ public class PicMenuActivity extends AppCompatActivity {
                                     if ((position - 1) >= 0 && position < ((nPoints * 2) + 1) && position < ((nPoints * 2) + (nLines * 2) + 1) && (position - 1) % 2 != 0) {                       //if it is the X of a point
                                         menuNumber.setAdapter(menuPointArrayAdapter);                  //we put menuNumber with the interesting points
                                         menuNumber.setOnItemSelectedListener(onMenuNumberPointSelectedListener(pointX.get((position - 1) / 2)));                //we set the listener
-                                        new ListenPoint(ImageView, Bitmap.createBitmap(lineSegment.getPic()), pointX.get((position - 1) / 2));                  // we change the color of the point that was selected in pointX
+                                        new ListenPoint(imageView, Bitmap.createBitmap(lineSegment.getImageView()), pointX.get((position - 1) / 2));                  // we change the color of the point that was selected in pointX
 
                                         typeOfPoint = 1;            //what type it is, for later with the other spinner specify the point
                                         numberOfPoint = (position - 1) / 2;          //what number of point it is
@@ -305,7 +304,7 @@ public class PicMenuActivity extends AppCompatActivity {
                                     if (position >= ((nPoints * 2) + 1) && position < ((nPoints * 2) + (nLines * 2) + 1) && (position - (nPoints * 2) + 1) % 2 == 0) {           //It the Y of a line
                                         menuNumber.setAdapter(menuLineArrayAdapter);
                                         menuNumber.setOnItemSelectedListener(onMenuNumberLineSelectedListener());                       //we set the listener
-                                        new ListenLine(ImageView, Bitmap.createBitmap(lineSegment.getPic()), lineY.get((position - ((nPoints) * 2) - 1) / 2));               // we change the color of the line that was selected in lineY
+                                        new ListenLine(imageView, Bitmap.createBitmap(lineSegment.getImageView()), lineY.get((position - ((nPoints) * 2) - 1) / 2));               // we change the color of the line that was selected in lineY
 
                                         typeOfLine = 0;             //what type it is, for later with the other spinner specify the line
                                         numberOfLine = (position - ((nPoints) * 2) - 1) / 2;
@@ -314,7 +313,7 @@ public class PicMenuActivity extends AppCompatActivity {
                                         menuNumber.setAdapter(menuLineArrayAdapter);
 
                                         menuNumber.setOnItemSelectedListener(onMenuNumberLineSelectedListener());                   //we set the listener
-                                        new ListenLine(ImageView, Bitmap.createBitmap(lineSegment.getPic()), lineX.get((position - ((nPoints) * 2) - 1) / 2));               // we change the color of the line that was selected in lineX
+                                        new ListenLine(imageView, Bitmap.createBitmap(lineSegment.getImageView()), lineX.get((position - ((nPoints) * 2) - 1) / 2));               // we change the color of the line that was selected in lineX
 
                                         typeOfLine = 1;         //what type it is, for later with the other spinner specify the line
                                         numberOfLine = (position - ((nPoints) * 2) - 1) / 2;
@@ -324,7 +323,7 @@ public class PicMenuActivity extends AppCompatActivity {
                                         menuNumber.setAdapter(menuLineArrayAdapter);
 
                                         menuNumber.setOnItemSelectedListener(onMenuNumberPlaneSelecterListener());              //we set the listener
-                                        new ListenLine(ImageView, Bitmap.createBitmap(lineSegment.getPic()), planeY.get((position - ((nLines) * 2) - ((nPoints) * 2) - 1) / 2));          // we change the color of the line that was selected in planeY
+                                        new ListenLine(imageView, Bitmap.createBitmap(lineSegment.getImageView()), planeY.get((position - ((nLines) * 2) - ((nPoints) * 2) - 1) / 2));          // we change the color of the line that was selected in planeY
 
                                         typeOfLine = 0;                     //what type it is, for later with the other spinner specify the line
                                         numberOfLine = (position - ((nLines) * 2) - ((nPoints) * 2) - 1) / 2;
@@ -334,7 +333,7 @@ public class PicMenuActivity extends AppCompatActivity {
                                         menuNumber.setAdapter(menuLineArrayAdapter);
 
                                         menuNumber.setOnItemSelectedListener(onMenuNumberPlaneSelecterListener());              //we set the listener
-                                        new ListenLine(ImageView, Bitmap.createBitmap(lineSegment.getPic()), planeX.get((position - ((nLines) * 2) - ((nPoints) * 2) - 1) / 2));          // we change the color of the line that was selected in planeX
+                                        new ListenLine(imageView, Bitmap.createBitmap(lineSegment.getImageView()), planeX.get((position - ((nLines) * 2) - ((nPoints) * 2) - 1) / 2));          // we change the color of the line that was selected in planeX
 
                                         typeOfLine = 1;                 //what type it is, for later with the other spinner specify the line
                                         numberOfLine = (position - ((nLines) * 2) - ((nPoints) * 2) - 1) / 2;
@@ -343,7 +342,7 @@ public class PicMenuActivity extends AppCompatActivity {
                                         menuNumber.setAdapter(menuLineArrayAdapter);
 
                                         menuNumber.setOnItemSelectedListener(onMenuNumberLandLineSelectedListener());          //set the listener
-                                        new ListenLine(ImageView, Bitmap.createBitmap(lineSegment.getPic()), landLine);                  // we change the color of the landLine
+                                        new ListenLine(imageView, Bitmap.createBitmap(lineSegment.getImageView()), landLine);                  // we change the color of the landLine
                                     }
                                 }
 
@@ -473,7 +472,7 @@ public class PicMenuActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {               //if we select a point, it converts in the type of the previous Spinner (X or Y), with this way we specify what point is it
                 if(counter != 0) {                         //when we create the listener, it activates alone. This don't let him!!
-                    new ListenPoint(ImageView, Bitmap.createBitmap(lineSegment.getPic()), pointObj.get(position));
+                    new ListenPoint(imageView, Bitmap.createBitmap(lineSegment.getImageView()), pointObj.get(position));
 
                     if (typeOfPoint == 0) {           //the point we selected is a Y
                         pointY.remove(numberOfPoint);
@@ -494,7 +493,7 @@ public class PicMenuActivity extends AppCompatActivity {
             }
         });
 
-        new ListenPoint(ImageView, Bitmap.createBitmap(lineSegment.getPic()), selectedPoint);
+        new ListenPoint(imageView, Bitmap.createBitmap(lineSegment.getImageView()), selectedPoint);
         return menuNumber.getOnItemSelectedListener();
 
     }
@@ -508,7 +507,7 @@ public class PicMenuActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {               //if we select a lin e, it converts in the type of the previous Spinner (Y o X), with this way we specify what line is it
                 if (counter != 0) {                                  //when we create the listener, it activates alone. This don't let him!!
-                    new ListenLine(ImageView, Bitmap.createBitmap(lineSegment.getPic()), lineObj.get(position));
+                    new ListenLine(imageView, Bitmap.createBitmap(lineSegment.getImageView()), lineObj.get(position));
 
                     if (typeOfLine == 0) {                //the line we selected is a Y
                         lineY.remove(numberOfLine);
@@ -537,7 +536,7 @@ public class PicMenuActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {               //if we select a plane, it converts in the type of the previous Spinner (Y o X), with this way we specify what plane is it
                 if (counter != 0) {                              //when we create the listener, it activates alone. This don't let him!!
-                    new ListenLine(ImageView, Bitmap.createBitmap(lineSegment.getPic()), lineObj.get(position));
+                    new ListenLine(imageView, Bitmap.createBitmap(lineSegment.getImageView()), lineObj.get(position));
 
                     if (typeOfLine == 0) {                //the line of the plano we selected is a Y
                         planeY.remove(numberOfLine);
@@ -566,7 +565,7 @@ public class PicMenuActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {               //if we select a landLine, it converts in the type of the previous Spinner (Y o X), with this way we specify what line is it
                 if (counter != 0) {                              //when we create the listener, it activates alone. This don't let him!!
-                    new ListenLine(ImageView, Bitmap.createBitmap(lineSegment.getPic()), lineObj.get(position));
+                    new ListenLine(imageView, Bitmap.createBitmap(lineSegment.getImageView()), lineObj.get(position));
 
                     landLine = lineObj.get(position);
                 }

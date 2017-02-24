@@ -15,16 +15,13 @@ import boofcv.struct.image.ImageUInt8;
  * Created by amil101 on 24/01/16.
  */
 public class Thresholding extends AsyncTask<String,Integer,Bitmap> {
-    ImageView pic;
+    ImageView imageView;
     int progress;
-    Bitmap bmPic;
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
 
-        bmPic = bitmap;
-        pic.setImageBitmap(bitmap);
-
+        imageView.setImageBitmap(bitmap);
     }
 
     @Override
@@ -46,14 +43,9 @@ public class Thresholding extends AsyncTask<String,Integer,Bitmap> {
         return image;
     }
 
-    public Thresholding(ImageView pic, int progress) {
+    public Thresholding(ImageView imageView, int progress) {
         super();
-        this.pic = pic;
+        this.imageView = imageView;
         this.progress = progress;
     }
-
-    public Bitmap getPic(){
-        return bmPic;
-    }
-
 }
