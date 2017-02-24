@@ -41,7 +41,6 @@ import java.util.List;
  * Created by amil101 on 12/02/16.
  */
 public class PicMenuActivity extends AppCompatActivity {
-    Context context;
 
     private Toolbar toolbar;
     DrawerLayout drawer;        //The Navigation View
@@ -55,7 +54,7 @@ public class PicMenuActivity extends AppCompatActivity {
     List<String> itemsListView;     //Items that are not expandable
 
     android.widget.ImageView ImageView;                                //the imageView where  be placed the picture
-    String file;                                        //picture file name
+    String copyOfFile;                                        //Copy of the original file
     Bitmap bmImg;                                        //Bitmap of the picture
     Thresholding thresholding;                             //object of thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
     int radiousSeekBar;
@@ -140,24 +139,22 @@ public class PicMenuActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener(onListViewItemListener());
 
-
-        context = this;
         Intent intent = getIntent();
-        String originalFile = intent.getStringExtra("file");                                            //we receive te file of the picture
-        file = "/storage/emulated/0/Android/data/com.diedrico.diedricoapp/files/pic2.jpg";
+        String originalFile = intent.getStringExtra("file");    //we receive te file of the picture
+        copyOfFile = originalFile.substring(0, originalFile.length() - 4) + "2.jpg";        //The path where we will copy the file
 
-        copyFile(originalFile, file);                                                                   //we have to copy the ImageView for modifying with BOOFCV
+        copyFile(originalFile, copyOfFile);                                                                   //we have to copy the picture for modifying with BOOFCV
 
         ImageView = (android.widget.ImageView) findViewById(R.id.imagePreview);                                              //the ImageView
-        bmImg = BitmapFactory.decodeFile(file);                                                         //We convert the file to Bitmap, for BoofCV
+        bmImg = BitmapFactory.decodeFile(copyOfFile);                                                         //We convert the file to Bitmap, for BoofCV
 
         thresholding = new Thresholding(ImageView, 1);                                                   //We modify the picture first for not crashing
-        thresholding.execute(file);
+        thresholding.execute(copyOfFile);
 
         seekBar = (SeekBar) findViewById(R.id.seekBar);                                                 //our SeekBar
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {                      //the listener for our SeekBar
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {            //we need to know the progress and then we modify our ImageView
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {            //we need to know the progress and then we modify our pic
                 radiousSeekBar = progress + 1;              //progress can't be 0
             }
 
@@ -170,7 +167,7 @@ public class PicMenuActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
 
                 thresholding = new Thresholding(ImageView, radiousSeekBar);                                                   //We pass the image to a filter to where blacks are more blacks and whites more whites
-                thresholding.execute(file);
+                thresholding.execute(copyOfFile);
             }
         });
 
