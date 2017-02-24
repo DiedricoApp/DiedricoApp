@@ -54,10 +54,9 @@ public class PicMenuActivity extends AppCompatActivity {
     ListView listView;      //To put the lists that are not expandable
     List<String> itemsListView;     //Items that are not expandable
 
-    ImageView imageView;                                //the imageView where  be placed the picture
-    String copyOfFile;                                        //Copy of the original file
-    Bitmap bmImg;                                        //Bitmap of the picture
     Thresholding thresholding;                             //object of thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
+    ImageView imageView;        //The main imageView of the activity
+    String copyOfFile;          //The path where we will copy the original pic
     //LineSegment lineSegment;                                //object, to scan interesting points and interesting lines
 
     SeekBar seekBar;
@@ -146,9 +145,8 @@ public class PicMenuActivity extends AppCompatActivity {
 
         imageView = (android.widget.ImageView) findViewById(R.id.imagePreview);                                              //the imageView
 
-        bmImg = BitmapFactory.decodeFile(copyOfFile);                                                         //We convert the file to Bitmap, for BoofCV
-        thresholding = new Thresholding(imageView, 1);                                                   //We modify the picture first for not crashing
-        thresholding.execute(copyOfFile);
+        thresholding = new Thresholding(imageView, copyOfFile);                                                   //We modify the picture first for not crashing
+        thresholding.execute(1);
 
         seekBar = (SeekBar) findViewById(R.id.seekBar);                                                 //our SeekBar
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener());
@@ -628,8 +626,7 @@ public class PicMenuActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                thresholding = new Thresholding(imageView, progress + 1);                                                   //We pass the image to a filter to where blacks are more blacks and whites more whites
-                thresholding.execute(copyOfFile);
+                new Thresholding(imageView, copyOfFile).execute(progress + 1);
             }
         };
     }
