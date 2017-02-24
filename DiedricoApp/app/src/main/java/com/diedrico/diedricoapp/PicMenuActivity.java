@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -53,11 +54,10 @@ public class PicMenuActivity extends AppCompatActivity {
     ListView listView;      //To put the lists that are not expandable
     List<String> itemsListView;     //Items that are not expandable
 
-    android.widget.ImageView imageView;                                //the imageView where  be placed the picture
+    ImageView imageView;                                //the imageView where  be placed the picture
     String copyOfFile;                                        //Copy of the original file
     Bitmap bmImg;                                        //Bitmap of the picture
     Thresholding thresholding;                             //object of thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
-    int radiousSeekBar;
     //LineSegment lineSegment;                                //object, to scan interesting points and interesting lines
 
     SeekBar seekBar;
@@ -151,24 +151,7 @@ public class PicMenuActivity extends AppCompatActivity {
         thresholding.execute(copyOfFile);
 
         seekBar = (SeekBar) findViewById(R.id.seekBar);                                                 //our SeekBar
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {                      //the listener for our SeekBar
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {            //we need to know the progress and then we modify our pic
-                radiousSeekBar = progress + 1;              //progress can't be 0
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-                thresholding = new Thresholding(imageView, radiousSeekBar);                                                   //We pass the image to a filter to where blacks are more blacks and whites more whites
-                thresholding.execute(copyOfFile);
-            }
-        });
+        seekBar.setOnSeekBarChangeListener(seekBarChangeListener());
 
         nPointsEditText = (EditText) findViewById(R.id.nPoints);                                                //The editText where the user specify the number of points
         nLinesEditText = (EditText) findViewById(R.id.nLines);                                                //The editText where the user specify the number of lines
@@ -627,6 +610,28 @@ public class PicMenuActivity extends AppCompatActivity {
     private void startCameraActivity(){
         Intent intent = new Intent(this, CameraActivity.class);
         this.startActivity(intent);
+    }
+
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener(){
+        return new SeekBar.OnSeekBarChangeListener() {                     //the listener for our SeekBar
+            int progress;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {            //we need to know the progress and then we modify our pic
+                this.progress = progress;              //progress can't be 0
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                thresholding = new Thresholding(imageView, progress + 1);                                                   //We pass the image to a filter to where blacks are more blacks and whites more whites
+                thresholding.execute(copyOfFile);
+            }
+        };
     }
 
     private void copyFile(String inputFile, String outputPath) {
