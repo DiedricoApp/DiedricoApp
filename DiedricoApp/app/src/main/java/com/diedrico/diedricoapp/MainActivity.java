@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
                 (Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.content_main, coordinatorLayout);
 
-        //The toolbar of the app
+        //The toolbar of the app (the top one, with the title)
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -76,35 +76,33 @@ public class MainActivity extends AppCompatActivity{
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //Create, prepare and set the listener to the expandable List View(in the navigation View)
         expListView = (ExpandableListView) findViewById(R.id.expandableListView);
-
         prepareExapandableListNavigationView();     //To load the lists
-
         listAdapter = new ExpandableListAdapter(this, header, listDataChild);
         expListView.setAdapter(listAdapter);
         expListView.setOnChildClickListener(onExpandableClick());
 
-
-        //Prepare the ListView, load the items from itemsListView
-
+        //Prepare the ListView, load the items from itemsListView (in the navigation View)
         listView = (ListView) findViewById(R.id.listView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.group_expandable, R.id.expandableGroupText, itemsListView);
         listView.setAdapter(arrayAdapter);
-
         listView.setOnItemClickListener(onListViewItemListener());
 
         //The toolbar for the tabs
         toolbarTabs = (Toolbar) findViewById(R.id.toolbar_tabs);
         setSupportActionBar(toolbarTabs);
 
+        //Setup the ViewPager
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
+        //Setup the tabLayout in the toolbarTabs
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(ViewPager viewPager) {      //Load the fragments to the ViewPager
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(projectionFragment = ProjectionFragment.newInstance(), "Espacio");
         adapter.addFragment(diedricoFragment = DiedricoFragment.newInstance(), "Diédrico");
@@ -113,7 +111,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() {       //To open or close the NavigationView on start
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_tabs_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -122,7 +120,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    public ExpandableListView.OnChildClickListener onExpandableClick(){
+    public ExpandableListView.OnChildClickListener onExpandableClick(){         //Setup the listener to the expandable List View
         return new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -251,14 +249,14 @@ public class MainActivity extends AppCompatActivity{
                         break;
                 }
 
-                diedrico = new Diedrico(pointVectors, lineVectors, planeVectors);
+                diedrico = new Diedrico(pointVectors, lineVectors, planeVectors);       //To put the renderer with the points lines and planes (OpenGL)
 
                 projectionFragment.changeRenderer(new MyGLRenderer(diedrico));
                 projectionFragment.newInstance();
 
-                diedricoFragment.setDiedrico(diedrico);
+                diedricoFragment.setDiedrico(diedrico);         //To create the diedrico (projection)
 
-                drawer.closeDrawer(GravityCompat.START);        //Closing the navigation View
+                drawer.closeDrawer(GravityCompat.START);        //Closing the navigation View when the user select an option
 
                 return false;
             }
@@ -284,10 +282,10 @@ public class MainActivity extends AppCompatActivity{
         this.startActivity(intent);
     }
 
-    private void prepareExapandableListNavigationView(){
+    private void prepareExapandableListNavigationView(){        //Prepare the data of the expadable list view that is in the R.array
         header = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
-        itemsListView = new ArrayList<>();
+        itemsListView = new ArrayList<>();      //To store the data of listView (not the expandable)
 
         //Adding child data
         header = Arrays.asList(getResources().getStringArray(R.array.menu));
