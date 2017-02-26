@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.diedrico.diedricoapp.picToDiedrico.Thresholding;
 import com.diedrico.diedricoapp.vector.LineVector;
+import com.diedrico.diedricoapp.vector.PlaneVector;
 import com.diedrico.diedricoapp.vector.PointVector;
 
 import java.io.FileInputStream;
@@ -124,12 +125,7 @@ public class PicMenuActivity extends AppCompatActivity {
 
         listAdapter = new ExpandableListAdapter(this, header, listDataChild);
         expListView.setAdapter(listAdapter);
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                return false;
-            }
-        });
+        expListView.setOnChildClickListener(onExpandableClick());
 
         //Prepare the ListView, load the items from itemsListView
         listView = (ListView) findViewById(R.id.listView);
@@ -589,6 +585,167 @@ public class PicMenuActivity extends AppCompatActivity {
         listDataChild.put(header.get(3), Arrays.asList(getResources().getStringArray(R.array.typeOfPlanes)));
 
         itemsListView.add(this.getString(R.string.camera));       //Add the camera view for ListView, the reason is that cameraView is no expandable but it must be in the nav view
+    }
+
+    public ExpandableListView.OnChildClickListener onExpandableClick(){         //Setup the listener to the expandable List View
+        return new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                ArrayList<PointVector> pointVectors = new ArrayList<>();
+                ArrayList<LineVector> lineVectors = new ArrayList<>();
+                ArrayList<PlaneVector> planeVectors = new ArrayList<>();
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);                   //When we have the picture, we go to PreviewMenuActivity with the name of the file
+
+                switch(groupPosition){
+                    case 0:
+                        switch (childPosition){
+                            case 0:     //The user pressed welcome
+                                intent.putExtra("title", R.string.welcome);
+                                intent.putExtra("explanation", R.string.firtstext);
+                                break;
+                            case 1:     //the user pressed components of diedrico
+                                intent.putExtra("title", R.string.components);
+                                intent.putExtra("explanation", R.string.edges);
+                                break;
+                            case 2:     //the user pressed edges
+                                intent.putExtra("title", R.string.edges);
+                                intent.putExtra("explanation", R.string.firtstext);
+                                break;
+                        }
+                        break;
+                    case 1:
+                        switch (childPosition){
+                            case 0:     //The user pressed point projection
+                                pointVectors.add(new PointVector(0.75f, 0.25f, 0.0f));
+                                pointVectors.add(new PointVector(0.4f, 0.6f, 0.0f));
+
+                                intent.putExtra("title", R.string.pointProjection);
+                                intent.putExtra("explanation", R.string.pointProjectionInfo);
+                                break;
+                            case 1:     ////The user pressed line projection
+                                lineVectors.add(new LineVector(0.0f, 0.8f, 0.4f, 0.9f, 0.0f, -0.4f));
+
+                                intent.putExtra("title", R.string.lineProjection);
+                                intent.putExtra("explanation", R.string.lineProjectionInfo);
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch (childPosition) {
+                            case 0:     //the user pressed crosswideLine
+                                lineVectors.add(new LineVector(0.0f, 0.8f, 0.4f, 0.9f, 0.0f, -0.4f));
+
+                                intent.putExtra("title", R.string.crosswideLine);
+                                intent.putExtra("explanation", R.string.crosswideLineInfo);
+                                break;
+                            case 1:     //the user pressed horizontal line
+                                lineVectors.add(new LineVector(0.9f, 0.0f, 0.4f, 0.9f, 0.9f, -0.4f));
+
+                                intent.putExtra("title", R.string.horizontalLine);
+                                intent.putExtra("explanation", R.string.horizontalLineInfo);
+                                break;
+                            case 2:     //the user pressed frontal line
+                                lineVectors.add(new LineVector(0.0f, 0.5f, 0.4f, 0.9f, 0.5f, -0.4f));
+
+                                intent.putExtra("title", R.string.frontalLine);
+                                intent.putExtra("explanation", R.string.frontalLineInfo);
+                                break;
+                            case 3:     //the user pressed rigid Line
+                                lineVectors.add(new LineVector(0.5f, 0.0f, 0.0f, 0.5f, 0.9f, 0.0f));
+
+                                intent.putExtra("title", R.string.rigidLine);
+                                intent.putExtra("explanation", R.string.rigidLineInfo);
+                                break;
+                            case 4:     //the user pressed vertical lne
+                                lineVectors.add(new LineVector(0.0f, 0.5f, 0.0f, 0.9f, 0.5f, 0.0f));
+
+                                intent.putExtra("title", R.string.verticalLine);
+                                intent.putExtra("explanation", R.string.verticalLineInfo);
+                                break;
+                            case 5:     //the user pressed ground line parallel line
+                                lineVectors.add(new LineVector(0.5f, 0.5f, 0.4f, 0.5f, 0.5f, -0.4f));
+
+                                intent.putExtra("title", R.string.groundLineParallelLine);
+                                intent.putExtra("explanation", R.string.groundLineParallelLineInfo);
+                                break;
+                            case 6:     //the user pressed profileLine
+                                lineVectors.add(new LineVector(0.9f, 0.0f, 0.0f, 0.0f, 0.9f, 0.0f));
+
+                                intent.putExtra("title", R.string.profileLine);
+                                intent.putExtra("explanation", R.string.profileLine);
+                                break;
+                            case 7:     //the user pressed ground line cutted line
+                                lineVectors.add(new LineVector(0.0f, 0.0f, 0.0f, 0.9f, 0.9f, 0.0f));
+
+                                intent.putExtra("title", R.string.groundLineCuttedLine);
+                                intent.putExtra("explanation", R.string.groundLineCuttedLineInfo);
+                                break;
+                        }
+                        break;
+                    case 3:
+                        switch (childPosition) {
+                            case 0:     //the user pressed crosswide plane
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.0f, 0.4f), new PointVector(0.0f, 1.0f, -0.5f), new PointVector(0.5f, 0.5f, -0.5f), new PointVector(1.0f, 0.0f, -0.5f)));
+
+                                intent.putExtra("title", R.string.crosswidePlane);
+                                intent.putExtra("explanation", R.string.crosswidePlanoInfo);
+                                break;
+                            case 1:     //the user pressed horizontal plane
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.5f, -0.5f), new PointVector(0.0f, 0.5f, 0.5f), new PointVector(0.9f, 0.5f, 0.5f), new PointVector(0.9f, 0.5f, -0.5f)));
+
+                                intent.putExtra("title", R.string.horizontalPlane);
+                                intent.putExtra("explanation", R.string.horizontalPlaneInfo);
+                                break;
+                            case 2:     //the user pressed frontal plane
+                                planeVectors.add(new PlaneVector(new PointVector(0.5f, 0.0f, 0.5f), new PointVector(0.5f, 0.0f, -0.5f), new PointVector(0.5f, 1.0f, -0.5f), new PointVector(0.5f, 1.0f, 0.5f)));
+
+                                intent.putExtra("title", R.string.frontalPlane);
+                                intent.putExtra("explanation", R.string.frontalPlaneInfo);
+                                break;
+                            case 3:     //the user pressed horizontal projection plane
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 1.0f, 0.4f), new PointVector(0.0f, 0.0f, 0.4f), new PointVector(0.5f, 0.0f, -0.5f), new PointVector(0.5f, 1.0f, -0.5f)));
+
+                                intent.putExtra("title", R.string.horizontalProjectionPlane);
+                                intent.putExtra("explanation", R.string.horizontalProjectionPlaneInfo);
+                                break;
+                            case 4:     //the user pressed vertical projection plane
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.0f, 0.4f), new PointVector(0.0f, 1.0f, -0.5f), new PointVector(1.0f, 1.0f, -0.5f), new PointVector(1.0f, 0.0f, 0.4f)));
+
+                                intent.putExtra("title", R.string.verticalProjectionPlane);
+                                intent.putExtra("explanation", R.string.verticalProjectionPlaneInfo);
+                                break;
+                            case 5:     //the user pressed groundLineParallelPlane
+                                planeVectors.add(new PlaneVector(new PointVector(0.5f, 0.0f, 0.5f), new PointVector(0.5f, 0.0f, -0.5f), new PointVector(0.0f, 0.7f, -0.5f), new PointVector(0.0f, 0.7f, 0.5f)));
+
+                                intent.putExtra("title", R.string.groundLineParallelPlane);
+                                intent.putExtra("explanation", R.string.groundLineParallelPlaneInfo);
+                                break;
+                            case 6:     //the user pressed groundline cutted plane
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.0f, 0.5f), new PointVector(1.0f, 1.0f, 0.5f), new PointVector(1.0f, 1.0f, -0.5f), new PointVector(0.0f, 0.0f, -0.5f)));
+
+                                intent.putExtra("title", R.string.groundLineCuttedPlane);
+                                intent.putExtra("explanation", R.string.groundLineCuttedPlaneInfo);
+                                break;
+                            case 7:     //the user pressed profile plane
+                                planeVectors.add(new PlaneVector(new PointVector(0.0f, 0.0f, 0.0f), new PointVector(1.0f, 0.0f, 0.0f), new PointVector(1.0f, 1.0f, 0.0f), new PointVector(0.0f, 1.0f, 0.0f)));
+
+                                intent.putExtra("title", R.string.profilePlane);
+                                intent.putExtra("explanation", R.string.profilePlaneInfo);
+                                break;
+                        }
+                        break;
+                }
+
+                intent.putParcelableArrayListExtra("pointVectors", pointVectors);
+                intent.putParcelableArrayListExtra("lineVectors", lineVectors);
+                intent.putParcelableArrayListExtra("planeVectors", planeVectors);
+
+                startActivity(intent);
+
+                return false;
+            }
+        };
     }
 
     private AdapterView.OnItemClickListener onListViewItemListener(){
