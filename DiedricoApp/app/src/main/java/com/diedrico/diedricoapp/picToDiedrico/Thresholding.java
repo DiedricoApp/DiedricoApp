@@ -17,6 +17,13 @@ import boofcv.struct.image.ImageUInt8;
 public class Thresholding extends AsyncTask<Integer, Integer, Bitmap> {
     ImageView imageView;
     String pic;
+
+    public Thresholding(ImageView imageView, String pic) {
+        super();
+        this.imageView = imageView;
+        this.pic = pic;
+    }
+
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
@@ -37,11 +44,5 @@ public class Thresholding extends AsyncTask<Integer, Integer, Bitmap> {
         VisualizeImageData.binaryToBitmap(binary, false, scaledBitmap, null);
 
         return scaledBitmap;
-    }
-
-    public Thresholding(ImageView imageView, String pic) {
-        super();
-        this.imageView = imageView;
-        this.pic = pic;
     }
 }
