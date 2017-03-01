@@ -18,12 +18,12 @@ public class PlaneVector implements Parcelable{
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeArray(new PointVector[]{
+        out.writeTypedArray(new PointVector[]{
                 p1,
                 p2,
                 p3,
                 p4
-        });
+        }, 0);
     }
 
     public static final Parcelable.Creator<PlaneVector> CREATOR
@@ -38,7 +38,7 @@ public class PlaneVector implements Parcelable{
     };
 
     private PlaneVector(Parcel in) {
-        PointVector pointVectors[] = (PointVector[]) in.readParcelableArray(PointVector.class.getClassLoader());
+        PointVector pointVectors[] = in.createTypedArray(PointVector.CREATOR);
         p1 = pointVectors[0];
         p2 = pointVectors[1];
         p3 = pointVectors[2];
