@@ -1,16 +1,18 @@
 package com.diedrico.diedricoapp;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.diedrico.diedricoapp.vector.Diedrico;
+import com.diedrico.diedricoapp.vector.LineVector;
+import com.diedrico.diedricoapp.vector.PlaneVector;
+import com.diedrico.diedricoapp.vector.PointVector;
+
+import java.util.List;
 
 /**
  * Created by amil101 on 15/08/16.
@@ -44,6 +46,17 @@ public class DiedricoFragment extends Fragment {
         diedrico = (ImageView) view.findViewById(R.id.projection);
         createDiedrico = new CreateDiedrico(diedrico);
 
+        //If there is a coming intent (from MenuPicActivity) we have to catch it and put the content
+        Bundle extras = getActivity().getIntent().getExtras();
+        if(extras != null) {
+
+            List<PointVector> comingPointVectors = extras.getParcelableArrayList("pointVectors");
+            List<LineVector> comingLineVectors = extras.getParcelableArrayList("lineVectors");
+            List<PlaneVector> comingPlaneVectors = extras.getParcelableArrayList("planeVectors");
+
+            setDiedrico(comingPointVectors, comingLineVectors, comingPlaneVectors);         //To create the diedrico (projection)
+        }
+
         return view;
     }
 
@@ -58,6 +71,20 @@ public class DiedricoFragment extends Fragment {
 
         if(!diedrico.getPlanes().isEmpty()){
             this.createDiedrico.addPlanes(diedrico.getPlanes());
+        }
+    }
+
+    public void setDiedrico(List<PointVector> pointVectors, List<LineVector> lineVectors, List<PlaneVector> planeVectors){
+        if(!pointVectors.isEmpty()){
+            this.createDiedrico.addDiedricoPoints(pointVectors);
+        }
+
+        if(!lineVectors.isEmpty()){
+            this.createDiedrico.addDiedricoLines(lineVectors);
+        }
+
+        if(!planeVectors.isEmpty()){
+            this.createDiedrico.addPlanes(planeVectors);
         }
     }
 }
