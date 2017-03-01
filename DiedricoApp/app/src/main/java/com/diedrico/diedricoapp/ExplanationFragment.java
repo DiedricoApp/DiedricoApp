@@ -36,10 +36,17 @@ public class ExplanationFragment extends Fragment {
 
         textViewTitle = (TextView) view.findViewById(R.id.explanationTitle);
         textViewExplanation = (TextView) view.findViewById(R.id.explanationText);
-        textViewTitle.setText(title);
-        textViewExplanation.setText(explanation);
 
-        return view;
+        Bundle extras = getActivity().getIntent().getExtras();
+        if(extras == null) {
+            textViewTitle.setText(title);
+            textViewExplanation.setText(explanation);
+        }
+        else{
+            textViewTitle.setText(extras.getInt("title"));
+            textViewExplanation.setText(extras.getInt("explanation"));
+        }
+            return view;
     }
 
     public static ExplanationFragment newInstance() {
