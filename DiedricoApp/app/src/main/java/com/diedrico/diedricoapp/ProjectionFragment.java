@@ -17,6 +17,11 @@ import com.diedrico.diedricoapp.opengl.MyGLRenderer;
 import com.diedrico.diedricoapp.opengl.MyGLRendererCamera;
 import com.diedrico.diedricoapp.opengl.MyGLSurfaceView;
 import com.diedrico.diedricoapp.vector.Diedrico;
+import com.diedrico.diedricoapp.vector.LineVector;
+import com.diedrico.diedricoapp.vector.PlaneVector;
+import com.diedrico.diedricoapp.vector.PointVector;
+
+import java.util.List;
 
 
 /**
@@ -63,11 +68,24 @@ public class ProjectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle sis) {
         super.onCreate(sis);
 
+
         final View view = inflater.inflate(R.layout.fragment_projection, parent, false);
 
         layoutForGL = (LinearLayout) view.findViewById(R.id.layoutForSurfaceViewtabs);
 
-        mGLView = new MyGLSurfaceView(getContext(), renderer);
+        Bundle extras = getActivity().getIntent().getExtras();
+        if(extras != null) {
+            List<PointVector> comingPointVectors = extras.getParcelableArrayList("pointVectors");
+            List<LineVector> comingLineVectors = extras.getParcelableArrayList("lineVectors");
+            List<PlaneVector> comingPlaneVectors = extras.getParcelableArrayList("planeVectors");
+
+            Diedrico diedrico = new Diedrico(comingPointVectors, comingLineVectors, comingPlaneVectors);       //To put the renderer with the points lines and planes (OpenGL)
+
+            mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(diedrico));
+        }
+        else{
+            mGLView = new MyGLSurfaceView(getContext(), renderer);
+        }
 
         threadTime();               //start the thread, for rotate the camera if the user don't press the screen
         pressed = false;
@@ -75,6 +93,7 @@ public class ProjectionFragment extends Fragment {
         mGLView.setOnTouchListener(listenerForCamera());
 
         layoutForGL.addView(mGLView);
+
         mGLView.requestRender();
 
         return view;
