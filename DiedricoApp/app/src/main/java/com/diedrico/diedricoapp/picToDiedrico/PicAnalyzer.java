@@ -30,57 +30,33 @@ import georegression.struct.line.LineSegment2D_F32;
 /**
  * Created by amil101 on 31/01/16.
  */
-public class PicAnalyzer extends AsyncTask<Bitmap, Integer, Bitmap> {
-    Context context;
-    ImageView pic;
-    Bitmap bmPic;
-    private static Bitmap myBM;
-
+public class PicAnalyzer extends AsyncTask<Bitmap, Integer, Void> {
     int nPoints;
     int nLines;
-    int nPlanes;
 
     List<PointVector> points = new ArrayList<>();
     List<LineVector> lines = new ArrayList<>();
 
-    Spinner numeroPuntos;
-
     public AsyncResponse delegate = null;
 
-    @Override
-    protected Bitmap doInBackground(Bitmap... params) {
-
-        myBM = detectLineSegments(detect(params[0], ImageFloat32.class, nPoints *2), ImageFloat32.class, ImageFloat32.class);
-
-        return myBM;
-
-
-    }
-
-    @Override
-    protected void onPostExecute(Bitmap bitmap) {
-        super.onPostExecute(bitmap);
-
-        bmPic = bitmap;
-        pic.setImageBitmap(bitmap);
-
-        delegate.processFinish(points, lines, null);
-    }
-
-    public PicAnalyzer(Context context, ImageView pic, int nPoints, Spinner numeroPuntos, AsyncResponse delegate){
+    public PicAnalyzer(int nPoints, AsyncResponse delegate){
         super();
         this.delegate = delegate;
-        this.context = context;
-        this.pic = pic;
         this.nPoints = nPoints;
-        this.numeroPuntos = numeroPuntos;
     }
 
-    public <T extends ImageSingleBand, D extends ImageSingleBand>
-    Bitmap detectLineSegments( Bitmap image ,
-                             Class<T> imageType ,
-                             Class<D> derivType )
-    {
+    @Override
+    protected Void doInBackground(Bitmap... params) {
+        points = detectPoints(params[0], ImageFloat32.class, nPoints *2);          //Detect interesting points, the number of points are nPoints*2 because each point has a Y's view and a X's view
+        lines = detectLineSegments(params[0], ImageFloat32.class, ImageFloat32.class);
+
+        delegate.processFinish(points, lines, null);
+        return null;
+    }
+
+    public <T extends ImageSingleBand, D extends ImageSingleBand> List<LineVector> detectLineSegments( Bitmap image , Class<T> imageType , Class<D> derivType ) {
+        List<LineVector> lineVectors = new ArrayList<>();
+
         // convert the line into a single band image
         T input = ConvertBitmap.bitmapToGray(image, null, imageType, null);
 
@@ -89,45 +65,20 @@ public class PicAnalyzer extends AsyncTask<Bitmap, Integer, Bitmap> {
 
         List<LineSegment2D_F32> found = detector.detect(input);
 
-        Paint paintMax;
-        paintMax = new Paint();
-        paintMax.setColor(Color.RED);
-        paintMax.setStyle(Paint.Style.FILL);
-
-        Canvas canvas = new Canvas(image);
-
-        if(found.size() > 0){
-            List<Double> modules = new ArrayList<>();               //For preveting find very short lines, we get the top module and then we discard the short ones
-            for (int i = 0; i < found.size(); i++) {
-                modules.add(new Vector(new PointVector(found.get(i).a.x, found.get(i).a.y), new PointVector(found.get(i).b.x, found.get(i).b.y)).getModule());
-            }
-            Collections.sort(modules);
-            Collections.reverse(modules);
-
-            double topModule = modules.get(0);          //this is the module of the largest line
-
-            for (int i = 0; i < found.size(); i++) {
-                if (new Vector(new PointVector(found.get(i).a.x, found.get(i).a.y), new PointVector(found.get(i).b.x, found.get(i).b.y)).getModule() > (topModule / 6)) {
-                    canvas.drawLine(found.get(i).a.x, found.get(i).a.y, found.get(i).b.x, found.get(i).b.y, paintMax);
-                    if (found.get(i).a.x < found.get(i).b.x) {               ////problem with lines
-                        lines.add(new LineVector(found.get(i).a.x, found.get(i).a.y, found.get(i).b.x, found.get(i).b.y));
-                    } else {
-                        lines.add(new LineVector(found.get(i).b.x, found.get(i).b.y, found.get(i).a.x, found.get(i).a.y));
-                    }
-                }
-            }
+        for(int i = 0; i < found.size(); i++){
+            lineVectors.add(new LineVector(found.get(i).b.x, found.get(i).b.y, found.get(i).a.x, found.get(i).a.y));
         }
-        return image;
+
+        return lineVectors;
     }
 
-    public <T extends ImageFloat32>
-    Bitmap detect( Bitmap image, Class<T> imageType , int nPuntos) {
+    public <T extends ImageFloat32> List<PointVector> detectPoints( Bitmap image, Class<T> imageType , int nPuntos) {
+        List<PointVector> pointVectors = new ArrayList<>();
 
         if(nPuntos != 0){           //There is a problem with BoofCV if we put 0 points
             T input = ConvertBitmap.bitmapToGray(image, null, imageType, null);
 
             // Create a Fast Hessian detector from the SURF paper.
-            // Other detectors can be used in this example too.
 
             InterestPointDetector<T> detector = FactoryInterestPoint.fastHessian(
                     new ConfigFastHessian(30, 2, nPuntos, 2, 9, 3, 4));
@@ -135,25 +86,11 @@ public class PicAnalyzer extends AsyncTask<Bitmap, Integer, Bitmap> {
             // find interest points in the image
             detector.detect(input);
 
-            Paint paintMax;
-            paintMax = new Paint();
-            paintMax.setColor(Color.RED);
-            paintMax.setStyle(Paint.Style.FILL);
-
-            Canvas canvas = new Canvas(image);
-
-
-            for(int i = 0; i<detector.getNumberOfFeatures();i++){
-                canvas.drawCircle((float) detector.getLocation(i).getX(), (float) detector.getLocation(i).getY(), 3, paintMax);
-                points.add(new PointVector(((float) detector.getLocation(i).getX()), ((float) detector.getLocation(i).getY())));
+            for(int i = 0; i < detector.getNumberOfFeatures(); i++){
+                pointVectors.add(new PointVector((float) detector.getLocation(i).getX(), (float) detector.getLocation(i).getY()));
             }
         }
-        return image;
-
-    }
-
-    public Bitmap getPic(){
-        return bmPic;
+        return pointVectors;
     }
 
     public interface AsyncResponse{
