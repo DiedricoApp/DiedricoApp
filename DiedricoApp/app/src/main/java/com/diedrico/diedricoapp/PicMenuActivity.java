@@ -3,7 +3,6 @@ package com.diedrico.diedricoapp;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +26,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.diedrico.diedricoapp.picToDiedrico.PicAnalyzer;
 import com.diedrico.diedricoapp.picToDiedrico.Thresholding;
 import com.diedrico.diedricoapp.vector.LineVector;
 import com.diedrico.diedricoapp.vector.PlaneVector;
@@ -58,7 +61,7 @@ public class PicMenuActivity extends AppCompatActivity {
     Thresholding thresholding;                             //object of thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
     ImageView imageView;        //The main imageView of the activity
     String copyOfFile;          //The path where we will copy the original pic
-    //LineSegment lineSegment;                                //object, to scan interesting points and interesting lines
+    PicAnalyzer analyzer;                                //object, to scan interesting points and interesting lines
 
     SeekBar seekBar;
 
@@ -170,20 +173,35 @@ public class PicMenuActivity extends AppCompatActivity {
 
         //Set menuNumber to the view and then put an array
         //menuColor = (Spinner) findViewById(R.id.menu_color);
-        //ArrayAdapter<CharSequence> menuColorArrayAdapter = ArrayAdapter.createFromResource(this, R, android.R.layout.simple_spinner_item);
+        //ArrayAdapter<CharSequence> menuColorArrayAdapter = ArrayAdapter.createFromResource(this, R.array., android.R.layout.simple_spinner_item);
         //menuColorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //menuColor.setAdapter(menuColorArrayAdapter);
     }
-/*
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.preview_menu_topmenu, menu);
+        inflater.inflate(R.menu.picmenu, menu);
 
+        final MenuItem analizar = menu.findItem(R.id.analyze);
+        analizar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Bitmap thresholdingBitmap = thresholding.getThresholding();
+
+                analyzer = new PicAnalyzer(getApplicationContext(), imageView, 10, new PicAnalyzer.AsyncResponse() {
+                    @Override
+                    public void processFinish(List<PointVector> points, List<LineVector> lines, List<Double> planos) {
+                        Log.i("asdf", "daf");
+                    }
+                });
+                analyzer.execute(thresholdingBitmap);
+                return true;
+            }
+        });
+
+        /*
         MenuItem analizar = menu.findItem(R.id.analyze);
         analizar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -343,6 +361,8 @@ public class PicMenuActivity extends AppCompatActivity {
             }
         });
 
+
+        /*
         MenuItem info = menu.findItem(R.id.info);
         info.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -426,6 +446,8 @@ public class PicMenuActivity extends AppCompatActivity {
             }
         });
 
+        */
+
 
         return true;
     }
@@ -442,6 +464,7 @@ public class PicMenuActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     AdapterView.OnItemSelectedListener onMenuNumberPointSelectedListener(Point selectedPoint) {
 
         menuNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
