@@ -61,7 +61,6 @@ public class PicMenuActivity extends AppCompatActivity {
 
     ImageView imageView;        //The main imageView of the activity
     String copyOfFile;          //The path where we will copy the original pic
-    PicAnalyzer analyzer;                                //object, to scan interesting points and interesting lines
     Bitmap thresholdingBitmap;
 
     SeekBar seekBar;
@@ -460,8 +459,7 @@ public class PicMenuActivity extends AppCompatActivity {
         return new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                analyzer = new PicAnalyzer(10, analyzerFinished());
-                analyzer.execute(thresholdingBitmap);
+                new PicAnalyzer(10, analyzerFinished()).execute(thresholdingBitmap);            //to scan interesting points and interesting lines
 
                 return true;
             }
