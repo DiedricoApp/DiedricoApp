@@ -46,11 +46,16 @@ public class PicAnalyzer extends AsyncTask<Bitmap, Integer, Void> {
     }
 
     @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+
+        delegate.processFinish(points, lines, null);
+    }
+
+    @Override
     protected Void doInBackground(Bitmap... params) {
         points = detectPoints(params[0], ImageFloat32.class, nPoints *2);          //Detect interesting points, the number of points are nPoints*2 because each point has a Y's view and a X's view
         lines = detectLineSegments(params[0], ImageFloat32.class, ImageFloat32.class);
-
-        delegate.processFinish(points, lines, null);
         return null;
     }
 
