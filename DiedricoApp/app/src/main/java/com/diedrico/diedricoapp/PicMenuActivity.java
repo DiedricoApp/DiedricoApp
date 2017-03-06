@@ -3,6 +3,7 @@ package com.diedrico.diedricoapp;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GravityCompat;
@@ -58,10 +59,10 @@ public class PicMenuActivity extends AppCompatActivity {
     ListView listView;      //To put the lists that are not expandable
     List<String> itemsListView;     //Items that are not expandable
 
-    Thresholding thresholding;                             //object of thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
     ImageView imageView;        //The main imageView of the activity
     String copyOfFile;          //The path where we will copy the original pic
     PicAnalyzer analyzer;                                //object, to scan interesting points and interesting lines
+    Bitmap thresholdingBitmap;
 
     SeekBar seekBar;
 
@@ -144,8 +145,13 @@ public class PicMenuActivity extends AppCompatActivity {
 
         imageView = (android.widget.ImageView) findViewById(R.id.imagePreview);                                              //the imageView
 
-        thresholding = new Thresholding(imageView, copyOfFile);                                                   //We modify the picture first for not crashing
-        thresholding.execute(1);
+        new Thresholding(BitmapFactory.decodeFile(copyOfFile), new Thresholding.AsyncResponse() {       //thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
+            @Override
+            public void processFinish(Bitmap result) {
+                imageView.setImageBitmap(result);
+                thresholdingBitmap = result;
+            }
+        }).execute(1);
 
         seekBar = (SeekBar) findViewById(R.id.seekBar);                                                 //our SeekBar
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener());
@@ -184,22 +190,8 @@ public class PicMenuActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.picmenu, menu);
 
-        final MenuItem analizar = menu.findItem(R.id.analyze);
-        analizar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Bitmap thresholdingBitmap = thresholding.getThresholding();
-
-                analyzer = new PicAnalyzer(getApplicationContext(), imageView, 10, new PicAnalyzer.AsyncResponse() {
-                    @Override
-                    public void processFinish(List<PointVector> points, List<LineVector> lines, List<Double> planos) {
-                        Log.i("asdf", "daf");
-                    }
-                });
-                analyzer.execute(thresholdingBitmap);
-                return true;
-            }
-        });
+        final MenuItem analyze = menu.findItem(R.id.analyze);
+        analyze.setOnMenuItemClickListener(analyzeClickListener());
 
         /*
         MenuItem analizar = menu.findItem(R.id.analyze);
@@ -462,6 +454,28 @@ public class PicMenuActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private MenuItem.OnMenuItemClickListener analyzeClickListener() {
+        return new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                analyzer = new PicAnalyzer(10, analyzerFinished());
+                analyzer.execute(thresholdingBitmap);
+
+                return true;
+            }
+        };
+    }
+
+    private PicAnalyzer.AsyncResponse analyzerFinished(){
+        return new PicAnalyzer.AsyncResponse() {
+            @Override
+            public void processFinish(List<PointVector> points, List<LineVector> lines, List<Double> planos) {
+                Log.i("asdf", points.toString());
+                Log.i("asdf", lines.toString());
+            }
+        };
     }
 
     /*
@@ -806,7 +820,13 @@ public class PicMenuActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                new Thresholding(imageView, copyOfFile).execute(progress + 1);
+                new Thresholding(BitmapFactory.decodeFile(copyOfFile), new Thresholding.AsyncResponse() {       //thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
+                    @Override
+                    public void processFinish(Bitmap result) {
+                        imageView.setImageBitmap(result);
+                        thresholdingBitmap = result;
+                    }
+                }).execute(progress + 1);
             }
         };
     }
