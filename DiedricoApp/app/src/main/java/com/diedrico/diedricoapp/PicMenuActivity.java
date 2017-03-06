@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GravityCompat;
@@ -32,6 +35,7 @@ import com.diedrico.diedricoapp.picToDiedrico.Thresholding;
 import com.diedrico.diedricoapp.vector.LineVector;
 import com.diedrico.diedricoapp.vector.PlaneVector;
 import com.diedrico.diedricoapp.vector.PointVector;
+import com.diedrico.diedricoapp.vector.Vector;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,6 +43,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -466,12 +471,40 @@ public class PicMenuActivity extends AppCompatActivity {
         };
     }
 
-    private PicAnalyzer.AsyncResponse analyzerFinished(){
+    private PicAnalyzer.AsyncResponse analyzerFinished(){           //We receive the important points and lines, we have to paint them
         return new PicAnalyzer.AsyncResponse() {
             @Override
             public void processFinish(List<PointVector> points, List<LineVector> lines, List<Double> planos) {
-                Log.i("asdf", points.toString());
-                Log.i("asdf", lines.toString());
+                Paint paintMax;
+                paintMax = new Paint();
+                paintMax.setColor(Color.RED);
+                paintMax.setStyle(Paint.Style.FILL);
+
+                Canvas canvas = new Canvas(thresholdingBitmap);
+
+                //Paint the interesting points
+                for(int i = 0; i < points.size(); i++){
+                    canvas.drawCircle(points.get(i).getPointX(), points.get(i).getPointY(), 3, paintMax);
+                }
+
+                //Paint the interesting lines
+                List<Double> modules = new ArrayList<>();               //For preveting find very short lines, we get the top module and then we discard the short ones
+                for (int i = 0; i < lines.size(); i++) {
+                    modules.add(new Vector(new PointVector(lines.get(i).getLineXA(), lines.get(i).getLineYA()), new PointVector(lines.get(i).getLineXB(), lines.get(i).getLineYB())).getModule());
+                }
+
+                Collections.sort(modules);
+                Collections.reverse(modules);
+
+                double topModule = modules.get(0);          //this is the module of the largest line
+
+                for (int i = 0; i < lines.size(); i++) {
+                    if (new Vector(new PointVector(lines.get(i).getLineXA(), lines.get(i).getLineYA()), new PointVector(lines.get(i).getLineXB(), lines.get(i).getLineYB())).getModule() > (topModule / 6)) {
+                        canvas.drawLine(lines.get(i).getLineXA(), lines.get(i).getLineYA(), lines.get(i).getLineXB(), lines.get(i).getLineYB(), paintMax);
+                    }
+                }
+
+                imageView.setImageBitmap(thresholdingBitmap);
             }
         };
     }
