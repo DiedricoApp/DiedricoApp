@@ -43,12 +43,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import com.annimon.stream.Stream;
 
 
 /**
@@ -493,6 +495,15 @@ public class PicMenuActivity extends AppCompatActivity {
                         lines.remove(linevector);
                     }
                 }
+
+                //Also, boofcv finds a lot of useless points near the landLine, so we have to delete them
+                final double yEdge = lines.get(0).getLineYA();
+                
+                points = Stream.of(points)
+                        .filter((PointVector point) -> point.getPointY() < yEdge - 15 || point.getPointY() > yEdge + 15)
+                        .toList();
+
+
 
                 Paint paintMax;
                 paintMax = new Paint();
