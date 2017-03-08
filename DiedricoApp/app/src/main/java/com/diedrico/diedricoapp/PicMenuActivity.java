@@ -44,8 +44,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -475,6 +478,22 @@ public class PicMenuActivity extends AppCompatActivity {
         return new PicAnalyzer.AsyncResponse() {
             @Override
             public void processFinish(List<PointVector> points, List<LineVector> lines, List<Double> planos) {
+                //First we have to delete the short lines, we get the top module and then we discard the short ones
+                Collections.sort(lines, new Comparator<LineVector>() {
+                    @Override
+                    public int compare(LineVector line1, LineVector line2) {
+                        return (line1.getModuleTwoDimensionalVector() - line2.getModuleTwoDimensionalVector() >= 0)? -1:1;
+                    }
+                });
+
+                double minModule = lines.get(0).getModuleTwoDimensionalVector()/6;
+
+                for(LineVector linevector : new ArrayList<>(lines)){
+                    if(linevector.getModuleTwoDimensionalVector() < minModule){
+                        lines.remove(linevector);
+                    }
+                }
+
                 Paint paintMax;
                 paintMax = new Paint();
                 paintMax.setColor(Color.RED);
@@ -488,20 +507,8 @@ public class PicMenuActivity extends AppCompatActivity {
                 }
 
                 //Paint the interesting lines
-                List<Double> modules = new ArrayList<>();               //For preveting find very short lines, we get the top module and then we discard the short ones
                 for (int i = 0; i < lines.size(); i++) {
-                    modules.add(new Vector(new PointVector(lines.get(i).getLineXA(), lines.get(i).getLineYA()), new PointVector(lines.get(i).getLineXB(), lines.get(i).getLineYB())).getModule());
-                }
-
-                Collections.sort(modules);
-                Collections.reverse(modules);
-
-                double topModule = modules.get(0);          //this is the module of the largest line
-
-                for (int i = 0; i < lines.size(); i++) {
-                    if (new Vector(new PointVector(lines.get(i).getLineXA(), lines.get(i).getLineYA()), new PointVector(lines.get(i).getLineXB(), lines.get(i).getLineYB())).getModule() > (topModule / 6)) {
-                        canvas.drawLine(lines.get(i).getLineXA(), lines.get(i).getLineYA(), lines.get(i).getLineXB(), lines.get(i).getLineYB(), paintMax);
-                    }
+                    canvas.drawLine(lines.get(i).getLineXA(), lines.get(i).getLineYA(), lines.get(i).getLineXB(), lines.get(i).getLineYB(), paintMax);
                 }
 
                 imageView.setImageBitmap(thresholdingBitmap);
