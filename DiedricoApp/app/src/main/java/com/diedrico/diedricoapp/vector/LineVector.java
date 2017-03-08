@@ -7,13 +7,13 @@ import android.os.Parcelable;
  * Created by amil101 on 23/03/16.
  */
 public class LineVector implements Parcelable {
-    float LineYA;
-    float LineXA;
-    float LineZA;
+    float lineYA;
+    float lineXA;
+    float lineZA;
 
-    float LineYB;
-    float LineXB;
-    float LineZB;
+    float lineYB;
+    float lineXB;
+    float lineZB;
 
     @Override
     public int describeContents() {
@@ -22,12 +22,12 @@ public class LineVector implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeFloatArray(new float[]{this.LineYA,
-                this.LineXA,
-                this.LineZA,
-                this.LineYB,
-                this.LineXB,
-                this.LineZB});
+        out.writeFloatArray(new float[]{this.lineYA,
+                this.lineXA,
+                this.lineZA,
+                this.lineYB,
+                this.lineXB,
+                this.lineZB});
     }
 
     public static final Creator<LineVector> CREATOR = new Creator<LineVector>() {
@@ -46,80 +46,87 @@ public class LineVector implements Parcelable {
         float[] data = new float[6];
 
         in.readFloatArray(data);
-        this.LineYA = data[0];
-        this.LineXA = data[1];
-        this.LineZA = data[2];
+        this.lineYA = data[0];
+        this.lineXA = data[1];
+        this.lineZA = data[2];
 
-        this.LineYB = data[3];
-        this.LineXB = data[4];
-        this.LineZB = data[5];
+        this.lineYB = data[3];
+        this.lineXB = data[4];
+        this.lineZB = data[5];
 
     }
 
     public LineVector(float LineYA, float LineXA, float LineYB, float LineXB){
 
-        this.LineYA = LineYA;
-        this.LineXA = LineXA;
+        this.lineYA = LineYA;
+        this.lineXA = LineXA;
 
-        this.LineYB = LineYB;
-        this.LineXB = LineXB;
+        this.lineYB = LineYB;
+        this.lineXB = LineXB;
     }
     public LineVector(float LineYA, float LineXA, float LineZA, float LineYB, float LineXB, float LineZB){
 
-        this.LineYA = LineYA;
-        this.LineXA = LineXA;
-        this.LineZA = LineZA;
+        this.lineYA = LineYA;
+        this.lineXA = LineXA;
+        this.lineZA = LineZA;
 
-        this.LineYB = LineYB;
-        this.LineXB = LineXB;
-        this.LineZB = LineZB;
+        this.lineYB = LineYB;
+        this.lineXB = LineXB;
+        this.lineZB = LineZB;
+    }
+
+    public double getModuleTwoDimensionalVector(){
+        float x = lineXB - lineXA;
+        float y = lineYB - lineYA;
+
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     public float getLineZB() {
-        return LineZB;
+        return lineZB;
     }
 
     public void setLineZB(float lineZB) {
-        this.LineZB = lineZB;
+        this.lineZB = lineZB;
     }
 
     public float getLineZA() {
-        return LineZA;
+        return lineZA;
     }
 
     public void setLineZA(float lineZA) {
-        this.LineZA = lineZA;
+        this.lineZA = lineZA;
     }
 
     public float getLineYB() {
-        return LineYB;
+        return lineYB;
     }
 
     public void setLineYB(float lineYB) {
-        this.LineYB = lineYB;
+        this.lineYB = lineYB;
     }
 
     public float getLineYA() {
-        return LineYA;
+        return lineYA;
     }
 
     public void setLineYA(float lineYA) {
-        this.LineYA = lineYA;
+        this.lineYA = lineYA;
     }
 
     public float getLineXB() {
-        return LineXB;
+        return lineXB;
     }
 
     public void setLineXB(float lineXB) {
-        this.LineXB = lineXB;
+        this.lineXB = lineXB;
     }
 
     public float getLineXA() {
-        return LineXA;
+        return lineXA;
     }
 
     public void setLineXA(float lineXA) {
-        this.LineXA = lineXA;
+        this.lineXA = lineXA;
     }
 }
