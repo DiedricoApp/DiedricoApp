@@ -14,4 +14,12 @@ public class PointDiedrico {
         this.y = pointY;
         this.x = pointX;
     }
+
+    public PointVector getY() {
+        return y;
+    }
+
+    public PointVector getX() {
+        return x;
+    }
 }
