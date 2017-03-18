@@ -501,44 +501,63 @@ public class PicMenuActivity extends AppCompatActivity {
                 //Also, boofcv finds a lot of useless points near the landLine, so we have to delete them
                 final double yEdge = lines.get(0).getLineYA();
 
-
-                Log.i("asdf", Integer.toString(points.size()));
-
                 points = Stream.of(points)
                         .filter((PointVector point) -> point.getPointY() < yEdge - 15 || point.getPointY() > yEdge + 15)
                         .toList();
 
-/*
+
+                //Then we have to delete the groups of points and take only one of them
                 for(int j = 0; j < points.size(); j++){
                     PointVector point1 = points.get(j);
                     for(int k = 0; k < points.size(); k++){
                         PointVector point2 = points.get(k);
 
                         if(point1.equals(point2)){
-                            if(k == points.size() - 1){
-                                points.remove(k);
-                                j--;
-                            }
                             continue;
                         }
 
-                        if(point1.getPointY() < yEdge && point2.getPointY() > yEdge && point1.getPointX() > point2.getPointX() - 5 && point1.getPointX() < point2.getPointX() + 5){         //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
-                            //points.remove(k);
-                            //points.remove(j);
-                            //j--;
-
-                            break;
-                        }
-
-                        if(k == points.size() - 1){         //The point doesn't have a couple
+                        if(point1.getPointX() > point2.getPointX() - 20 && point1.getPointX() < point2.getPointX() + 20 && point1.getPointY() > point2.getPointY() - 20 && point1.getPointY() < point2.getPointY() + 20){         //Has found a result, then we delete the points from the list
                             points.remove(k);
-                            j--;
+                            k--;
                         }
                     }
                 }
 
-*/
+                List<PointDiedrico> pointDiedrico = new ArrayList<>();
 
+                //Delete the wrong point, the ones that don't have x's view and y's view respectively (cota and alejamiento). The correct points will be in pointDiedrico
+                for(int j = 0; j < points.size(); j++){
+                    PointVector point1 = points.get(j);
+                    for(int k = 0; k < points.size(); k++){
+                        PointVector point2 = points.get(k);
+
+                        if(point1.equals(point2)){
+                            if(k == points.size() - 1){     //The last point of the list
+                                points.remove(k);
+                                j--;
+                                break;
+                            }
+                            continue;
+                        }
+
+                        if(point1.getPointY() > yEdge && point2.getPointY() < yEdge || point2.getPointY() > yEdge && point1.getPointY() < yEdge){
+                            if(point1.getPointX() > point2.getPointX() - 20 && point1.getPointX() < point2.getPointX() + 20){         //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
+                                pointDiedrico.add(new PointDiedrico(point1, point2));
+
+                                points.remove(k);
+                                points.remove(j);
+
+                                j--;
+                                break;
+                            }
+                        }
+
+                        if(k == points.size() - 1){         //The point doesn't have a couple
+                            points.remove(j);
+                            j--;
+                        }
+                    }
+                }
 
                 Paint paintMax;
                 paintMax = new Paint();
@@ -547,9 +566,10 @@ public class PicMenuActivity extends AppCompatActivity {
 
                 Canvas canvas = new Canvas(thresholdingBitmap);
 
-                //Paint the interesting points
-                for(int i = 0; i < points.size(); i++){
-                    canvas.drawCircle(points.get(i).getPointX(), points.get(i).getPointY(), 3, paintMax);
+                for(int i = 0; i < pointDiedrico.size(); i++){
+                    canvas.drawCircle(pointDiedrico.get(i).getX().getPointX(), pointDiedrico.get(i).getX().getPointY(), 3, paintMax);
+
+                    canvas.drawCircle(pointDiedrico.get(i).getY().getPointX(), pointDiedrico.get(i).getY().getPointY(), 3, paintMax);
                 }
 
                 //Paint the interesting lines
