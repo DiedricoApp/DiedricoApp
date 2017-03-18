@@ -86,8 +86,7 @@ public class PicAnalyzer extends AsyncTask<Bitmap, Integer, Void> {
             // Create a Fast Hessian detector from the SURF paper.
 
             InterestPointDetector<T> detector = FactoryInterestPoint.fastHessian(
-                    new ConfigFastHessian(30, 2, 0, 2, 3, 3, 4));
-
+                    new ConfigFastHessian(30, 1, 20, 2, 3, 4, 4));
             // find interest points in the image
             detector.detect(input);
 
