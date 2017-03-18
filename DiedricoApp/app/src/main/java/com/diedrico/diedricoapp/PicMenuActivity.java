@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.diedrico.diedricoapp.picToDiedrico.PicAnalyzer;
+import com.diedrico.diedricoapp.picToDiedrico.PointDiedrico;
 import com.diedrico.diedricoapp.picToDiedrico.Thresholding;
 import com.diedrico.diedricoapp.vector.LineVector;
 import com.diedrico.diedricoapp.vector.PlaneVector;
@@ -48,6 +49,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import com.annimon.stream.Stream;
@@ -498,11 +500,44 @@ public class PicMenuActivity extends AppCompatActivity {
 
                 //Also, boofcv finds a lot of useless points near the landLine, so we have to delete them
                 final double yEdge = lines.get(0).getLineYA();
-                
+
+
+                Log.i("asdf", Integer.toString(points.size()));
+
                 points = Stream.of(points)
                         .filter((PointVector point) -> point.getPointY() < yEdge - 15 || point.getPointY() > yEdge + 15)
                         .toList();
 
+/*
+                for(int j = 0; j < points.size(); j++){
+                    PointVector point1 = points.get(j);
+                    for(int k = 0; k < points.size(); k++){
+                        PointVector point2 = points.get(k);
+
+                        if(point1.equals(point2)){
+                            if(k == points.size() - 1){
+                                points.remove(k);
+                                j--;
+                            }
+                            continue;
+                        }
+
+                        if(point1.getPointY() < yEdge && point2.getPointY() > yEdge && point1.getPointX() > point2.getPointX() - 5 && point1.getPointX() < point2.getPointX() + 5){         //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
+                            //points.remove(k);
+                            //points.remove(j);
+                            //j--;
+
+                            break;
+                        }
+
+                        if(k == points.size() - 1){         //The point doesn't have a couple
+                            points.remove(k);
+                            j--;
+                        }
+                    }
+                }
+
+*/
 
 
                 Paint paintMax;
