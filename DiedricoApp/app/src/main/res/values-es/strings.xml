@@ -17,12 +17,12 @@
     <string name="typeOfLines">Tipos de lineas</string>
     <string name="typeOfPlanes">Tipos de planos</string>
     <string name="welcome">Bienvenido</string>
-    <string name="camera">Camara</string>
+    <string name="camera">Cámara</string>
     <string name="crosswideLine">Linea oblicua</string>
     <string name="crosswidePlane">Plano oblicuo</string>
     <string name="frontalLine">Linea frontal</string>
     <string name="frontalPlane">Plano frontal</string>
-    <string name="groundLineCuttedLine">Linea que pasa por la linea de tierra</string>
+    <string name="groundLineCuttedLine">Línea que pasa por la linea de tierra</string>
     <string name="groundLineCuttedPlane">Plano que pasa por la linea de tierra</string>
     <string name="groundLineParallelLine">Linea paralela a la linea de tierra</string>
     <string name="groundLineParallelPlane">Plano paralelo a la linea de tierra</string>
