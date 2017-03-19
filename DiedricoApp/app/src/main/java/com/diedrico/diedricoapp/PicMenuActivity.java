@@ -564,17 +564,21 @@ public class PicMenuActivity extends AppCompatActivity {
                     }
                 }
 
+                int indexColors = 0;    //Counter for the color array
+                int[] colors = getApplicationContext().getResources().getIntArray(R.array.rainbow);
 
                 Paint paintMax;
                 paintMax = new Paint();
-                paintMax.setColor(Color.RED);
                 paintMax.setStyle(Paint.Style.FILL);
 
                 Canvas canvas = new Canvas(thresholdingBitmap);
 
                 for(int i = 0; i < pointDiedrico.size(); i++){
-                    canvas.drawCircle(pointDiedrico.get(i).getX().getPointX(), pointDiedrico.get(i).getX().getPointY(), 3, paintMax);
+                    paintMax.setColor(colors[indexColors++]);
+                    if(indexColors >= colors.length)
+                        indexColors = 0;
 
+                    canvas.drawCircle(pointDiedrico.get(i).getX().getPointX(), pointDiedrico.get(i).getX().getPointY(), 3, paintMax);
                     canvas.drawCircle(pointDiedrico.get(i).getY().getPointX(), pointDiedrico.get(i).getY().getPointY(), 3, paintMax);
                 }
 
@@ -588,10 +592,23 @@ public class PicMenuActivity extends AppCompatActivity {
 
                 //Paint the interesting lines
                 for (int i = 0; i < lines.size(); i++) {
+                    paintMax.setColor(colors[indexColors++]);
+                    if(indexColors >= colors.length)
+                        indexColors = 0;
                     canvas.drawLine(lines.get(i).getLineXA(), lines.get(i).getLineYA(), lines.get(i).getLineXB(), lines.get(i).getLineYB(), paintMax);
                 }
 
                 imageView.setImageBitmap(thresholdingBitmap);
+            }
+        };
+    }
+
+    private MenuItem.OnMenuItemClickListener processClickListener() {
+        return new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                return true;
             }
         };
     }
