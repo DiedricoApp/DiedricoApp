@@ -498,13 +498,17 @@ public class PicMenuActivity extends AppCompatActivity {
                     }
                 }
 
-                //Also, boofcv finds a lot of useless points near the landLine, so we have to delete them
+                //Also, boofcv finds a lot of useless points near the lines, so we have to delete them
                 final double yEdge = lines.get(0).getLineYA();
 
-                points = Stream.of(points)
-                        .filter((PointVector point) -> point.getPointY() < yEdge - 15 || point.getPointY() > yEdge + 15)
-                        .toList();
+                Iterator<LineVector> lineVectorIterator = lines.iterator();
+                while(lineVectorIterator.hasNext()){
+                    LineVector lineVector = lineVectorIterator.next();
 
+                    points = Stream.of(points)
+                            .filter((PointVector point) -> point.getPointY() < lineVector.getYEquation(point.getPointX()) - 15 || point.getPointY() > lineVector.getYEquation(point.getPointX()) + 15)
+                            .toList();
+                }
 
                 //Then we have to delete the groups of points and take only one of them
                 for(int j = 0; j < points.size(); j++){
@@ -515,6 +519,7 @@ public class PicMenuActivity extends AppCompatActivity {
                         if(point1.equals(point2)){
                             continue;
                         }
+
 
                         if(point1.getPointX() > point2.getPointX() - 20 && point1.getPointX() < point2.getPointX() + 20 && point1.getPointY() > point2.getPointY() - 20 && point1.getPointY() < point2.getPointY() + 20){         //Has found a result, then we delete the points from the list
                             points.remove(k);
@@ -559,6 +564,7 @@ public class PicMenuActivity extends AppCompatActivity {
                     }
                 }
 
+
                 Paint paintMax;
                 paintMax = new Paint();
                 paintMax.setColor(Color.RED);
@@ -571,6 +577,14 @@ public class PicMenuActivity extends AppCompatActivity {
 
                     canvas.drawCircle(pointDiedrico.get(i).getY().getPointX(), pointDiedrico.get(i).getY().getPointY(), 3, paintMax);
                 }
+
+
+                /*
+                for(int i = 0; i < points.size(); i++){
+                    canvas.drawCircle(points.get(i).getPointX(), points.get(i).getPointY(), 3, paintMax);
+                }
+                */
+
 
                 //Paint the interesting lines
                 for (int i = 0; i < lines.size(); i++) {
