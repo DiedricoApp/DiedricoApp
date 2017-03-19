@@ -82,6 +82,10 @@ public class LineVector implements Parcelable {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
+    public double getYEquation(double x){
+        return (((x - lineXA)/(lineXB-lineXA))*(lineYB-lineYA)) + lineYA;
+    }
+
     public float getLineZB() {
         return lineZB;
     }
