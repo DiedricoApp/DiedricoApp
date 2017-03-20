@@ -499,8 +499,6 @@ public class PicMenuActivity extends AppCompatActivity {
                 }
 
                 //Also, boofcv finds a lot of useless points near the lines, so we have to delete them
-                final double yEdge = lines.get(0).getLineYA();
-
                 Iterator<LineVector> lineVectorIterator = lines.iterator();
                 while(lineVectorIterator.hasNext()){
                     LineVector lineVector = lineVectorIterator.next();
@@ -545,8 +543,10 @@ public class PicMenuActivity extends AppCompatActivity {
                             continue;
                         }
 
-                        if(point1.getPointY() > yEdge && point2.getPointY() < yEdge || point2.getPointY() > yEdge && point1.getPointY() < yEdge){
-                            if(point1.getPointX() > point2.getPointX() - 20 && point1.getPointX() < point2.getPointX() + 20){         //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
+                        if(point1.getPointY() > lines.get(0).getYEquation(point1.getPointX()) && point2.getPointY() < lines.get(0).getYEquation(point2.getPointX())
+                                || point2.getPointY() > lines.get(0).getYEquation(point2.getPointX()) && point1.getPointY() < lines.get(0).getYEquation(point1.getPointX())){
+                            if(point1.getPointX() > point2.getPointX() - 20 && point1.getPointX() < point2.getPointX() + 20){
+                                //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
                                 pointDiedrico.add(new PointDiedrico(point1, point2));
 
                                 points.remove(k);
