@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/green"
+        android:gravity="center_horizontal"
+        android:src="@drawable/ic_check_black_24dp"
+        android:scaleType="fitCenter"
+        android:id="@+id/buttonWrong" />
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/red"
+        android:src="@drawable/ic_cancel_black_24dp"
+        android:scaleType="fitCenter"
+        android:id="@+id/buttonOk"/>
+
+</LinearLayout>
