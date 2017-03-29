@@ -96,8 +96,6 @@ public class LineVector implements Parcelable {
         return (((x - lineXA)/(lineXB-lineXA))*(lineYB-lineYA)) + lineYA;
     }
 
-    public double
-
     public float getLineZB() {
         return lineZB;
     }

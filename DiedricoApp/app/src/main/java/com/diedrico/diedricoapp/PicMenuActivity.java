@@ -30,6 +30,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.diedrico.diedricoapp.picToDiedrico.LineDiedrico;
 import com.diedrico.diedricoapp.picToDiedrico.PicAnalyzer;
 import com.diedrico.diedricoapp.picToDiedrico.PointDiedrico;
 import com.diedrico.diedricoapp.picToDiedrico.Thresholding;
@@ -80,6 +81,9 @@ public class PicMenuActivity extends AppCompatActivity {
     EditText nPointsEditText;                                   //where we specify the number of points
     EditText nLinesEditText;                                    //where we specify the number of lines
     EditText nPlanesEditText;                                   //where we specify the number of planes
+
+    List<PointVector> allPoints;      //var to store the points found
+    List<LineVector> allLines;        //var to store the lines found
 
     int nPoints;                                                // the number of points
     int nLines;                                                 // the number of lines
@@ -482,6 +486,10 @@ public class PicMenuActivity extends AppCompatActivity {
         return new PicAnalyzer.AsyncResponse() {
             @Override
             public void processFinish(List<PointVector> points, List<LineVector> lines, List<Double> planos) {
+                //Save the points in another var, if the user select that there are errors in the scan, he can select the points and lines manually
+                allPoints = points;
+                allLines = lines;
+
                 //First we have to delete the short lines, we get the top module and then we discard the short ones
                 Collections.sort(lines, new Comparator<LineVector>() {
                     @Override
@@ -495,6 +503,43 @@ public class PicMenuActivity extends AppCompatActivity {
                 for(LineVector linevector : new ArrayList<>(lines)){
                     if(linevector.getModuleTwoDimensionalVector() < minModule){
                         lines.remove(linevector);
+                    }
+                }
+
+                List<PointDiedrico> pointDiedrico = new ArrayList<>();
+                List<LineDiedrico> lineDiedrico = new ArrayList<>();
+
+                ////Delete the wrong lines, the ones that don't have x's view and y's view respectively (cota and alejamiento). Then we differ between if it is a line(in diedrico) or a plane
+                for(int j = 1; j < lines.size(); j++){          //Start in 1 because in 0 the line is the landLine
+                    LineVector line1 = lines.get(j);
+                    for(int k = 1; k < lines.size(); k++){
+                        LineVector line2 = lines.get(k);
+
+                        if(line1.equals(line2)){
+                            if(k == lines.size() - 1){     //The last line of the list
+                                lines.remove(k);
+                                j--;
+                                break;
+                            }
+                            continue;
+                        }
+
+                        if(line1.getLineYA() > lines.get(0).getYEquation(line1.getLineXA()) && line2.getLineYA() < lines.get(0).getYEquation(line1.getLineXA()) || line2.getLineYA() > lines.get(0).getYEquation(line1.getLineXA()) && line1.getLineYA() < lines.get(0).getYEquation(line1.getLineXA())){
+                            if(line1.getLineXA() > line2.getLineXA() - 50 && line1.getLineXA() < line2.getLineXA() + 50){         //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
+                                lineDiedrico.add(new LineDiedrico(line1, line2));
+
+                                lines.remove(k);
+                                lines.remove(j);
+
+                                j--;
+                                break;
+                            }
+                        }
+
+                        if(k == lines.size() - 1){         //The line doesn't have a couple
+                            lines.remove(j);
+                            j--;
+                        }
                     }
                 }
 
@@ -526,8 +571,6 @@ public class PicMenuActivity extends AppCompatActivity {
                     }
                 }
 
-                List<PointDiedrico> pointDiedrico = new ArrayList<>();
-
                 //Delete the wrong point, the ones that don't have x's view and y's view respectively (cota and alejamiento). The correct points will be in pointDiedrico
                 for(int j = 0; j < points.size(); j++){
                     PointVector point1 = points.get(j);
@@ -545,7 +588,7 @@ public class PicMenuActivity extends AppCompatActivity {
 
                         if(point1.getPointY() > lines.get(0).getYEquation(point1.getPointX()) && point2.getPointY() < lines.get(0).getYEquation(point2.getPointX())
                                 || point2.getPointY() > lines.get(0).getYEquation(point2.getPointX()) && point1.getPointY() < lines.get(0).getYEquation(point1.getPointX())){
-                            if(point1.getPointX() > point2.getPointX() - 20 && point1.getPointX() < point2.getPointX() + 20){
+                            if(point1.getPointX() > point2.getPointX() - 15 && point1.getPointX() < point2.getPointX() + 15){
                                 //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
                                 pointDiedrico.add(new PointDiedrico(point1, point2));
 
@@ -582,20 +625,18 @@ public class PicMenuActivity extends AppCompatActivity {
                     canvas.drawCircle(pointDiedrico.get(i).getY().getPointX(), pointDiedrico.get(i).getY().getPointY(), 3, paintMax);
                 }
 
-
-                /*
-                for(int i = 0; i < points.size(); i++){
-                    canvas.drawCircle(points.get(i).getPointX(), points.get(i).getPointY(), 3, paintMax);
-                }
-                */
+                //Paint the landLine with color blue
+                paintMax.setColor(Color.BLUE);
+                canvas.drawLine(lines.get(0).getLineXA(), lines.get(0).getLineYA(), lines.get(0).getLineXB(), lines.get(0).getLineYB(), paintMax);
 
 
                 //Paint the interesting lines
-                for (int i = 0; i < lines.size(); i++) {
+                for (int i = 0; i < lineDiedrico.size(); i++) {
                     paintMax.setColor(colors[indexColors++]);
                     if(indexColors >= colors.length)
                         indexColors = 0;
-                    canvas.drawLine(lines.get(i).getLineXA(), lines.get(i).getLineYA(), lines.get(i).getLineXB(), lines.get(i).getLineYB(), paintMax);
+                    canvas.drawLine(lineDiedrico.get(i).getX().getLineXA(), lineDiedrico.get(i).getX().getLineYA(), lineDiedrico.get(i).getX().getLineXB(), lineDiedrico.get(i).getX().getLineYB(), paintMax);
+                    canvas.drawLine(lineDiedrico.get(i).getY().getLineXA(), lineDiedrico.get(i).getY().getLineYA(), lineDiedrico.get(i).getY().getLineXB(), lineDiedrico.get(i).getY().getLineYB(), paintMax);
                 }
 
                 imageView.setImageBitmap(thresholdingBitmap);
