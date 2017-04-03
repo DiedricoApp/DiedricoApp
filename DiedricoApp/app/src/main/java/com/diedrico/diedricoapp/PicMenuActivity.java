@@ -1055,7 +1055,7 @@ public class PicMenuActivity extends AppCompatActivity {
                         ScalarProduct scalarProductForX = new ScalarProduct(AB, AD);
                         ScalarProduct scalarProductForY = new ScalarProduct(AB, AC);
 
-                        pointVectors.add(new PointVector((float)(scalarProductForY.getHeight() / AB.getModule()), (float)(scalarProductForX.getHeight() / AB.getModule()), (float)(scalarProductForY.getLength() / AB.getModule())));
+                        pointVectors.add(new PointVector((float)(scalarProductForY.getHeight() / AB.getModule()), (float)(scalarProductForX.getHeight() / AB.getModule()), (float)(scalarProductForY.getLength() / AB.getModule()) - 0.5f));
                     }
 
                     /*
