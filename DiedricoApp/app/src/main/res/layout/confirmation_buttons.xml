@@ -11,7 +11,7 @@
         android:gravity="center_horizontal"
         android:src="@drawable/ic_check_black_24dp"
         android:scaleType="fitCenter"
-        android:id="@+id/buttonWrong" />
+        android:id="@+id/buttonOk" />
 
     <ImageButton
         android:layout_width="match_parent"
@@ -20,6 +20,6 @@
         android:background="@color/red"
         android:src="@drawable/ic_cancel_black_24dp"
         android:scaleType="fitCenter"
-        android:id="@+id/buttonOk"/>
+        android:id="@+id/buttonWrong"/>
 
 </LinearLayout>
