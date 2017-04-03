@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ImageFormat;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -24,7 +25,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -37,6 +40,7 @@ import com.diedrico.diedricoapp.picToDiedrico.Thresholding;
 import com.diedrico.diedricoapp.vector.LineVector;
 import com.diedrico.diedricoapp.vector.PlaneVector;
 import com.diedrico.diedricoapp.vector.PointVector;
+import com.diedrico.diedricoapp.vector.ScalarProduct;
 import com.diedrico.diedricoapp.vector.Vector;
 
 import java.io.FileInputStream;
@@ -60,7 +64,7 @@ import com.annimon.stream.Stream;
  * Created by amil101 on 12/02/16.
  */
 public class PicMenuActivity extends AppCompatActivity {
-
+    Context context;
     private Toolbar toolbar;
     DrawerLayout drawer;        //The Navigation View
     private CoordinatorLayout coordinatorLayout;        //The layout with the tabLayout, we need to inflate the content we want to show
@@ -75,8 +79,14 @@ public class PicMenuActivity extends AppCompatActivity {
     ImageView imageView;        //The main imageView of the activity
     String copyOfFile;          //The path where we will copy the original pic
     Bitmap thresholdingBitmap;
+    Boolean analyzerFinished = Boolean.FALSE;
 
     SeekBar seekBar;
+    LayoutInflater layoutInflater;      //Inflater for confirm analysis
+    LinearLayout confirmationLayout;    //The layout where we will put the buttons
+    ImageButton confirmButton;          //Confirm Button
+    ImageButton wrongButton;            //Wrong button
+
 
     EditText nPointsEditText;                                   //where we specify the number of points
     EditText nLinesEditText;                                    //where we specify the number of lines
@@ -89,9 +99,13 @@ public class PicMenuActivity extends AppCompatActivity {
     int nLines;                                                 // the number of lines
     int nPlanes;                                                // the number of planes
 
+
     Spinner menuType;                                   //where will be the types of points, lines or planes that we already specified
     Spinner menuNumber;                                 //where will be the points, lines or planes found
     Spinner menuColor;                                  //where we will specify the color
+
+    List<PointDiedrico> pointDiedrico = new ArrayList<>();
+    List<LineDiedrico> lineDiedrico = new ArrayList<>();
 
     List<PointVector> pointObj = new ArrayList<>();               //whre we will put all the interested points found with BoofCV
     List<LineVector> lineObj = new ArrayList<>();                 //where will be all the interested lines found with BoofDC
@@ -120,6 +134,8 @@ public class PicMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = this;     //set the context
 
         //Inflate the content in the coordinator layout
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
@@ -171,6 +187,17 @@ public class PicMenuActivity extends AppCompatActivity {
         seekBar = (SeekBar) findViewById(R.id.seekBar);                                                 //our SeekBar
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener());
 
+        //Inflate the buttons to confirm the analysis
+        layoutInflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        confirmationLayout = (LinearLayout) findViewById(R.id.menuLayout);
+        layoutInflater.inflate(R.layout.confirmation_buttons, confirmationLayout);
+
+        confirmButton = (ImageButton) confirmationLayout.findViewById(R.id.buttonOk);
+        confirmButton.setOnClickListener(confirmClickListener());
+        wrongButton = (ImageButton) confirmationLayout.findViewById(R.id.buttonWrong);
+        wrongButton.setOnClickListener(wrongButtonClickListener());
+
+/*
         nPointsEditText = (EditText) findViewById(R.id.nPoints);                                                //The editText where the user specify the number of points
         nLinesEditText = (EditText) findViewById(R.id.nLines);                                                //The editText where the user specify the number of lines
         nPlanesEditText = (EditText) findViewById(R.id.nPlanes);                                                //The editText where the user specify the number of planes
@@ -197,6 +224,7 @@ public class PicMenuActivity extends AppCompatActivity {
         //ArrayAdapter<CharSequence> menuColorArrayAdapter = ArrayAdapter.createFromResource(this, R.array., android.R.layout.simple_spinner_item);
         //menuColorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //menuColor.setAdapter(menuColorArrayAdapter);
+        */
     }
 
     @Override
@@ -486,6 +514,9 @@ public class PicMenuActivity extends AppCompatActivity {
         return new PicAnalyzer.AsyncResponse() {
             @Override
             public void processFinish(List<PointVector> points, List<LineVector> lines, List<Double> planos) {
+                //Set that the analyzer finished
+                analyzerFinished = Boolean.TRUE;
+
                 //Save the points in another var, if the user select that there are errors in the scan, he can select the points and lines manually
                 allPoints = points;
                 allLines = lines;
@@ -498,6 +529,7 @@ public class PicMenuActivity extends AppCompatActivity {
                     }
                 });
 
+                landLine = lines.get(0);            //This is the landLine
                 double minModule = lines.get(0).getModuleTwoDimensionalVector()/6;
 
                 for(LineVector linevector : new ArrayList<>(lines)){
@@ -506,8 +538,8 @@ public class PicMenuActivity extends AppCompatActivity {
                     }
                 }
 
-                List<PointDiedrico> pointDiedrico = new ArrayList<>();
-                List<LineDiedrico> lineDiedrico = new ArrayList<>();
+                pointDiedrico = new ArrayList<>();
+                lineDiedrico = new ArrayList<>();
 
                 ////Delete the wrong lines, the ones that don't have x's view and y's view respectively (cota and alejamiento). Then we differ between if it is a line(in diedrico) or a plane
                 for(int j = 1; j < lines.size(); j++){          //Start in 1 because in 0 the line is the landLine
@@ -608,7 +640,7 @@ public class PicMenuActivity extends AppCompatActivity {
                 }
 
                 int indexColors = 0;    //Counter for the color array
-                int[] colors = getApplicationContext().getResources().getIntArray(R.array.rainbow);
+                int[] colors = context.getResources().getIntArray(R.array.rainbow);
 
                 Paint paintMax;
                 paintMax = new Paint();
@@ -808,7 +840,7 @@ public class PicMenuActivity extends AppCompatActivity {
                 ArrayList<LineVector> lineVectors = new ArrayList<>();
                 ArrayList<PlaneVector> planeVectors = new ArrayList<>();
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);                   //When we have the picture, we go to PreviewMenuActivity with the name of the file
+                Intent intent = new Intent(context, MainActivity.class);                   //When we have the picture, we go to PreviewMenuActivity with the name of the file
 
                 switch(groupPosition){
                     case 0:
@@ -996,6 +1028,7 @@ public class PicMenuActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                analyzerFinished = Boolean.FALSE;
                 new Thresholding(BitmapFactory.decodeFile(copyOfFile), new Thresholding.AsyncResponse() {       //thresholding, the pictur pass to a filter where blacks are more blacks and whites more whites
                     @Override
                     public void processFinish(Bitmap result) {
@@ -1003,6 +1036,134 @@ public class PicMenuActivity extends AppCompatActivity {
                         thresholdingBitmap = result;
                     }
                 }).execute(progress + 1);
+            }
+        };
+    }
+
+    private ImageButton.OnClickListener confirmClickListener(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(analyzerFinished){           //The analysis is ok so we pass to 3D, but before we have to differ from a line or a plane and then locate them
+                    // in the space with trigonometry
+
+                    ArrayList<PointVector> pointVectors = new ArrayList<>();       //we pass the points to PointVector to know his X, his Y and his Z
+                    for(int i = 0; i < pointDiedrico.size(); i++){
+                        Vector AB = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(landLine.getLineXB(), landLine.getLineYB()));
+                        Vector AC = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(pointDiedrico.get(i).getY().getPointX(), pointDiedrico.get(i).getY().getPointY()));
+                        Vector AD = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(pointDiedrico.get(i).getX().getPointX(), pointDiedrico.get(i).getX().getPointY()));
+                        ScalarProduct scalarProductForX = new ScalarProduct(AB, AD);
+                        ScalarProduct scalarProductForY = new ScalarProduct(AB, AC);
+
+                        pointVectors.add(new PointVector((float)(scalarProductForY.getHeight() / AB.getModule()), (float)(scalarProductForX.getHeight() / AB.getModule()), (float)(scalarProductForY.getLength() / AB.getModule())));
+                    }
+
+                    /*
+                    ArrayList<LineVector> lineVectors = new ArrayList<>();        //we pass the lines to PointVector to know his X, his Y and his Z
+                    for(int i = 0; i < nLines; i ++){
+                        Vector AB = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(landLine.getXb(), landLine.getYb()));
+                        Vector AC = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(lineY.get(i).getXa(), lineY.get(i).getYa()));
+                        Vector AD = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(lineX.get(i).getXa(), lineX.get(i).getYa()));
+                        Vector AE = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(lineY.get(i).getXb(), lineY.get(i).getYb()));
+                        Vector AF = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(lineX.get(i).getXb(), lineX.get(i).getYb()));
+
+                        ScalarProduct scalarProductXA = new ScalarProduct(AB, AD);
+                        ScalarProduct scalarProductYA = new ScalarProduct(AB, AC);
+                        ScalarProduct scalarProductXB = new ScalarProduct(AB, AF);
+                        ScalarProduct scalarProductYB = new ScalarProduct(AB, AE);
+
+                        lineVectors.add(new LineVector((float)(scalarProductYA.getHeight()/AB.getModule()), (float)(scalarProductXA.getHeight()/AB.getModule()), (float)(scalarProductYA.getLength()/AB.getModule()), (float)(scalarProductYB.getHeight()/AB.getModule()), (float)(scalarProductXB.getHeight()/AB.getModule()), (float)(scalarProductYB.getLength()/AB.getModule())));
+                    }
+
+                    ArrayList<PlaneVector> planeVectors = new ArrayList<>();         //we pass the planes to PointVector to know his X, his Y and his Z
+                    for(int i = 0; i < nPlanes; i++){
+                        Vector AB = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(landLine.getXb(), landLine.getYb()));
+                        Vector AC = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(planeY.get(i).getXa(), planeY.get(i).getYa()));
+                        Vector AD = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(planeY.get(i).getXb(), planeY.get(i).getYb()));
+                        Vector AE = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(planeX.get(i).getXa(), planeX.get(i).getYa()));
+                        Vector AF = new Vector(new Point(landLine.getXa(), landLine.getYa()), new Point(planeX.get(i).getXb(), planeX.get(i).getYb()));
+
+                        ScalarProduct scalarProductBeginningPlane;
+                        ScalarProduct scalarProductX;
+                        ScalarProduct scalarProductY;
+
+                        if(planeY.get(i).getYa() > planeY.get(i).getYb()){           //Problem with planes
+                            scalarProductBeginningPlane = new ScalarProduct(AB, AD);
+                            scalarProductX = new ScalarProduct(AB, AE);
+                            scalarProductY = new ScalarProduct(AB, AC);
+                        }
+                        else{
+                            scalarProductBeginningPlane = new ScalarProduct(AB, AC);
+                            scalarProductX = new ScalarProduct(AB, AF);
+                            scalarProductY = new ScalarProduct(AB, AD);
+                        }
+
+                        planeVectors.add(new PlaneVector((float)(scalarProductBeginningPlane.getLength()/AB.getModule()), (float)(scalarProductY.getHeight()/AB.getModule()), (float)(scalarProductX.getHeight()/AB.getModule()), (float)(scalarProductY.getLength()/AB.getModule())));
+                    }
+
+                    */
+
+                    Intent intent = new Intent(getApplicationContext(), OpenGlActivity.class);              //we pass the vector to OpenGL
+                    intent.putParcelableArrayListExtra("points", pointVectors);
+                    //intent.putParcelableArrayListExtra("lines", lineVectors);
+                    //intent.putParcelableArrayListExtra("planes", planeVectors);
+
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    getApplicationContext().startActivity(intent);
+
+                    Toast.makeText(context, "aaaaaa", Toast.LENGTH_LONG).show();
+                }
+                else{                           //There is no analysis so we analyse the pic
+                    Toast.makeText(context, "Analyzing", Toast.LENGTH_LONG).show();
+                    new PicAnalyzer(10, analyzerFinished()).execute(thresholdingBitmap);            //to scan interesting points and interesting lines
+                }
+            }
+        };
+    }
+
+    private ImageButton.OnClickListener wrongButtonClickListener(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(analyzerFinished){           //The analysis was wrong so we move to the menu to select manually the interesting points and lines
+                    Log.i("asdf", "asdffff");
+                    confirmationLayout.removeAllViews();
+                    layoutInflater.inflate(R.layout.pic_analyzer_menu, confirmationLayout);
+
+
+                    nPointsEditText = (EditText) findViewById(R.id.nPoints);                                                //The editText where the user specify the number of points
+                    nLinesEditText = (EditText) findViewById(R.id.nLines);                                                //The editText where the user specify the number of lines
+                    nPlanesEditText = (EditText) findViewById(R.id.nPlanes);                                                //The editText where the user specify the number of planes
+
+                    //array of color
+                    String colors[] = {"Red", "Green", "Blue"};
+
+                    //Set menuType to the view and then put an array
+                    menuType = (Spinner) confirmationLayout.findViewById(R.id.menu_tipo);
+                    ArrayAdapter<String> menuTipoArrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, colors);
+                    menuTipoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                    menuType.setAdapter(menuTipoArrayAdapter);
+
+
+                    //Set menuNumber to the view and then put an array
+                    menuNumber = (Spinner) confirmationLayout.findViewById(R.id.menu_numero);
+                    ArrayAdapter<String> menuNumeroArrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, colors);
+                    menuNumeroArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    menuNumber.setAdapter(menuNumeroArrayAdapter);
+
+
+                    //Set menuNumber to the view and then put an array
+                    //menuColor = (Spinner) findViewById(R.id.menu_color);
+                    //ArrayAdapter<CharSequence> menuColorArrayAdapter = ArrayAdapter.createFromResource(this, R.array., android.R.layout.simple_spinner_item);
+                    //menuColorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    //menuColor.setAdapter(menuColorArrayAdapter);
+
+
+                }
+                else{
+                    Toast.makeText(context, "First you have to select the best picture and confirm", Toast.LENGTH_LONG).show();
+                }
             }
         };
     }
@@ -1036,7 +1197,7 @@ public class PicMenuActivity extends AppCompatActivity {
     int getnPoints(){
         int nPoints = 0;
         if(nPointsEditText.getText().toString().matches("")){
-            Toast.makeText(getApplicationContext(), "Invalid points", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Invalid points", Toast.LENGTH_SHORT).show();
         }
         else{
             nPoints = Integer.parseInt(nPointsEditText.getText().toString());
@@ -1048,7 +1209,7 @@ public class PicMenuActivity extends AppCompatActivity {
     int getnLines(){
         int nLines = 0;
         if(nPointsEditText.getText().toString().matches("")){
-            Toast.makeText(getApplicationContext(), "Invalid lines", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Invalid lines", Toast.LENGTH_SHORT).show();
         }
         else{
             nLines = Integer.parseInt(nLinesEditText.getText().toString());
@@ -1060,7 +1221,7 @@ public class PicMenuActivity extends AppCompatActivity {
     int getnPlanes(){
         int nPlanes = 0;
         if(nPointsEditText.getText().toString().matches("")){
-            Toast.makeText(getApplicationContext(), "Invalid planes", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Invalid planes", Toast.LENGTH_SHORT).show();
         }
         else{
             nPlanes = Integer.parseInt(nPlanesEditText.getText().toString());
