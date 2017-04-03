@@ -1,7 +1,7 @@
 # DiedricoApp
 DiedricoApp es una aplicación en Android para enseñar uno de los sistemas de dibujo técnico llamada diédrico que se imparte en Bachillerato. El objetivo de la aplicación es potenciar la vista espacial del alumnado ayudándolo a ver más allá de un papel, con animaciones interactivas, con toda la materia de la asignatura, y con funciones especiales para dispositivos móviles como la visión artificial.
 
-#Screenshots
+##Screenshots
 <img src="Images/uno.png" alt="point" height="330"> <img src="Images/dos.png" alt="point" height="330"> 
 <img src="Images/tres.png" alt="line" height="330"> <img src="Images/cuatro.png" alt="line" height="330"> <br>
 <img src="Images/cinco.png" alt="plane" height="330"> <img src="Images/seis.png" alt="plane" height="330">
