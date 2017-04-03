@@ -166,9 +166,9 @@ public class MyGLRenderer extends MyGLRendererCamera {
         for(int i = 0; i < points.size(); i++){
             Matrix.setIdentityM(mTranslationMatrix, 0);
             Matrix.translateM(mTranslationMatrix, 0, points.get(i).getPointX(), points.get(i).getPointY(), points.get(i).getPointZ());
-            Matrix.multiplyMM(scratch, 0, scratch, 0, mTranslationMatrix, 0);
+            Matrix.multiplyMM(mTranslationMatrix, 0, scratch, 0, mTranslationMatrix, 0);
 
-            glPoints.get(i).draw(scratch);
+            glPoints.get(i).draw(mTranslationMatrix);
         }
 
         for(int i = 0; i < lines.size(); i++)
