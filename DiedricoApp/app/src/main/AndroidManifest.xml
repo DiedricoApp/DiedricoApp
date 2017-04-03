@@ -32,6 +32,10 @@
             android:name=".PicMenuActivity"
             android:theme="@style/NoActionBarModified" >
         </activity>
+        <activity
+            android:name=".OpenGlActivity"
+            android:theme="@style/NoActionBarModified" >
+        </activity>
     </application>
 
 </manifest>
