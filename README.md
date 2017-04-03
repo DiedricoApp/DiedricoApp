@@ -18,14 +18,14 @@ Con esta app se pretende ayudar a los alumnos a entender más facilmente como fu
 
 ## Características
 El proyecto se divide en dos partes:
-    1. Explicación de la materia de diédrico a través de animaciones y explicaciones precisas para que el alumno desarrolles su visión expacial. Tiene tres pantallas que serian: 
-	*Espacio: Donde están las animaciones de la proyección en cuestión.
-	*Diédrico: Proyección del plano en vista diédrica.
-	*Explicación: Una explicación del concepto que se está trabajando.
+1. Explicación de la materia de diédrico a través de animaciones y explicaciones precisas para que el alumno desarrolles su visión expacial. Tiene tres pantallas que serian: 
+*Espacio: Donde están las animaciones de la proyección en cuestión.
+*Diédrico: Proyección del plano en vista diédrica.
+*Explicación: Una explicación del concepto que se está trabajando.
 	
 <img src="Images/documentacion.gif" alt="all" height="330"><br>
 
-    2. Reconocimiento de láminas con visión artifial, para pasar una lámina de diedrico a un sistema tridimensional. Para utilizarla solo hay que hacer una foto y directamente se pasaría a ver la lámina en 3 dimensiones.
+2. Reconocimiento de láminas con visión artifial, para pasar una lámina de diedrico a un sistema tridimensional. Para utilizarla solo hay que hacer una foto y directamente se pasaría a ver la lámina en 3 dimensiones.
 
 <img src="Images/todoPSD.png" alt="all" height="330"> <img src="Images/todo3DPSD.png" alt="all" height="330"><br>
 
@@ -52,7 +52,7 @@ Para esta aplicación se ha utilizado [BoofCV](https://github.com/lessthanoptima
 
 ## Créditos
 DiedricoApp fue escrita por:
-    *Fran Acién
+*Fran Acién
 
 ## License
 This work is licensed under the terms of the GNU General Public License, version 2 or later (see
