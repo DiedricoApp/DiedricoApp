@@ -33,7 +33,7 @@ El proyecto se divide en dos partes:
 La aplicación todavía está en proceso, aunque si eres muy impaciente puedes descargarte el proyecto y compilarlo en tu teléfono, o descargarte el binario de aquí.
 
 ## Blog del proyecto
-Puedes seguir el avance de la aplicación en www.diedrico.com
+Puedes seguir el avance de la aplicación en [diedrico.com](http://diedrico.com/)
 
 ## ¿Cómo funciona?
 El proyecto se divide en dos partes, la parte de la explicación y, la otra, de visión artificial. Una descripción rápida de como funciona sería:
@@ -42,7 +42,7 @@ Para la explicación la clase principal es MainActivity, que es la que organiza 
 
 Para la visión artificial se utiliza la librería de BoofCV. La principal clase es DiedricoFragment que es la encargada de analizar la imagen, aplicar filtros para eliminar las imperfecciones y lanzar la proyección en 3 dimensiones.
 
-Una explicación más detallada del código en el blog del proyecto, diedrico.com
+Una explicación más detallada del código en el blog del proyecto, [aquí](http://diedrico.com/Explicando-el-c%C3%B3digo/).
 
 ## ¿Se puede contribuir?
 Sí, por supuesto.
@@ -52,7 +52,7 @@ Para esta aplicación se ha utilizado [BoofCV](https://github.com/lessthanoptima
 
 ## Créditos
 DiedricoApp fue escrita por:
-* Fran Acién
+* [Fran Acién](https://github.com/acien101), estudiante de 1ro de Ingenieria de Computadores en la Universidad Politénica de Madrid.
 
 ## License
 This work is licensed under the terms of the GNU General Public License, version 2 or later (see
