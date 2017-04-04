@@ -883,7 +883,7 @@ public class Camera2BasicFragment extends Fragment
                 Activity activity = getActivity();
                 if (null != activity) {
                     new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
+                            .setMessage(R.string.sorry)
                             .setPositiveButton(android.R.string.ok, null)
                             .show();
                 }

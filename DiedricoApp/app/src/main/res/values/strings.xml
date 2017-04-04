@@ -121,5 +121,6 @@
         <item>@string/groundLineCuttedPlane</item>
         <item>@string/profilePlane</item>
     </string-array>
+    <string name="sorry">Sorry, but this part of the app is not finished</string>
 
 </resources>

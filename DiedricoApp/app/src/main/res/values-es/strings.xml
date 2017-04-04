@@ -70,4 +70,5 @@
     <string name="representation">Representación</string>
     <string name="explanation">Explicación</string>
     <string name="profileLine">Recta de perfil</string>
+    <string name="sorry">Lo siento, pero esta parte de la aplicación no está terminada</string>
 </resources>
