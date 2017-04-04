@@ -1074,8 +1074,36 @@ public class PicMenuActivity extends AppCompatActivity {
                     ArrayList<PlaneVector> planeVectors = new ArrayList<>();
                     for(int i = 0; i < lineDiedrico.size(); i++){
                         //We have to differ from a line or a plane, the difference its that plane have one view very next from each other (this is only with crosswide planes but for the moment its OK)
-                        if(false){//lineDiedrico.get(0).getX().getLineXA() > lineDiedrico.get(0).getY().getLineXA() - 5 && lineDiedrico.get(0).getX().getLineXA() < lineDiedrico.get(0).getY().getLineXA() + 5 && lineDiedrico.get(0).getX().getLineYA() > lineDiedrico.get(0).getY().getLineYA() - 5 && lineDiedrico.get(0).getX().getLineYA() > lineDiedrico.get(0).getY().getLineYA() + 5){           //It seems to be a plane
-                            Log.i("asdf", "planooooo");
+                        if(lineDiedrico.get(i).getX().getLineXA() > lineDiedrico.get(i).getY().getLineXA() - 5 && lineDiedrico.get(i).getX().getLineXA() < lineDiedrico.get(i).getY().getLineXA() + 5 &&
+                                lineDiedrico.get(i).getX().getLineYA() > lineDiedrico.get(i).getY().getLineYA() - 5 && lineDiedrico.get(i).getX().getLineYA() > lineDiedrico.get(i).getY().getLineYA() + 5){           //It seems to be a plane
+
+                            Vector AB = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(landLine.getLineXB(), landLine.getLineYB()));
+                            Vector AC = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(lineDiedrico.get(i).getY().getLineXA(), lineDiedrico.get(i).getY().getLineYA()));
+                            Vector AD = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(lineDiedrico.get(i).getY().getLineXB(), lineDiedrico.get(i).getY().getLineYB()));
+                            Vector AE = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(lineDiedrico.get(i).getX().getLineXA(), lineDiedrico.get(i).getX().getLineYA()));
+                            Vector AF = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(lineDiedrico.get(i).getX().getLineXB(), lineDiedrico.get(i).getX().getLineYB()));
+
+                            ScalarProduct scalarProductBeginningPlane;
+                            ScalarProduct scalarProductX;
+                            ScalarProduct scalarProductY;
+
+                            if(planeY.get(i).getLineYA() > planeY.get(i).getLineYB()){           //Problem with planes
+                                scalarProductBeginningPlane = new ScalarProduct(AB, AD);
+                                scalarProductX = new ScalarProduct(AB, AE);
+                                scalarProductY = new ScalarProduct(AB, AC);
+                            }
+                            else{
+                                scalarProductBeginningPlane = new ScalarProduct(AB, AC);
+                                scalarProductX = new ScalarProduct(AB, AF);
+                                scalarProductY = new ScalarProduct(AB, AD);
+                            }
+
+                            PointVector pointVector1 = new PointVector(0, 0, (float)(scalarProductBeginningPlane.getLength()/AB.getModule()));
+                            PointVector pointVector2 = new PointVector(0.0f, (float)(scalarProductY.getHeight()/AB.getModule()), (float)(scalarProductY.getLength()/AB.getModule()));
+                            PointVector pointVector3 = new PointVector((float)(scalarProductX.getHeight()/AB.getModule()), 0.0f, (float)(scalarProductY.getLength()/AB.getModule()));
+                            PointVector pointVector4 = pointVector2.getMidPoint(pointVector3);
+
+                            planeVectors.add(new PlaneVector(pointVector1, pointVector2, pointVector3, pointVector4));
                         }
                         else{           //It seems to be a line
                             Vector AB = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(landLine.getLineXB(), landLine.getLineYB()));
