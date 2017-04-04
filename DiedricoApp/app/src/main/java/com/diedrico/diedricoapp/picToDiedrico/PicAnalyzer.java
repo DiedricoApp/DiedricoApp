@@ -71,7 +71,13 @@ public class PicAnalyzer extends AsyncTask<Bitmap, Integer, Void> {
         List<LineSegment2D_F32> found = detector.detect(input);
 
         for(int i = 0; i < found.size(); i++){
-            lineVectors.add(new LineVector(found.get(i).b.y, found.get(i).b.x, found.get(i).a.y, found.get(i).a.x));
+            if(found.get(i).a.y < found.get(i).b.y){           //The first point is the smaller X's
+                lineVectors.add(new LineVector(found.get(i).a.y, found.get(i).a.x, found.get(i).b.y, found.get(i).b.x));
+            }
+            else{
+                lineVectors.add(new LineVector(found.get(i).b.y, found.get(i).b.x, found.get(i).a.y, found.get(i).a.x));
+            }
+
         }
 
         return lineVectors;
