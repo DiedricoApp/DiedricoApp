@@ -558,7 +558,12 @@ public class PicMenuActivity extends AppCompatActivity {
 
                         if(line1.getLineYA() > lines.get(0).getYEquation(line1.getLineXA()) && line2.getLineYA() < lines.get(0).getYEquation(line1.getLineXA()) || line2.getLineYA() > lines.get(0).getYEquation(line1.getLineXA()) && line1.getLineYA() < lines.get(0).getYEquation(line1.getLineXA())){
                             if(line1.getLineXA() > line2.getLineXA() - 50 && line1.getLineXA() < line2.getLineXA() + 50){         //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
-                                lineDiedrico.add(new LineDiedrico(line1, line2));
+                                if(line1.getLineYA() > landLine.getLineYA()){//We store the cota and alejamiento, the cota is the line over the landline
+                                    lineDiedrico.add(new LineDiedrico(line1, line2));
+                                }
+                                else{
+                                    lineDiedrico.add(new LineDiedrico(line2, line1));
+                                }
 
                                 lines.remove(k);
                                 lines.remove(j);
@@ -622,7 +627,12 @@ public class PicMenuActivity extends AppCompatActivity {
                                 || point2.getPointY() > lines.get(0).getYEquation(point2.getPointX()) && point1.getPointY() < lines.get(0).getYEquation(point1.getPointX())){
                             if(point1.getPointX() > point2.getPointX() - 15 && point1.getPointX() < point2.getPointX() + 15){
                                 //Has found a result, then we delete the points from the list, and put them in pointDiedricoList and we continue
-                                pointDiedrico.add(new PointDiedrico(point1, point2));
+                                if(point1.getPointY() > lines.get(0).getYEquation(point1.getPointX())){         //We store the cota and alejamiento, the cota is the point over the landline
+                                    pointDiedrico.add(new PointDiedrico(point1, point2));
+                                }
+                                else{
+                                    pointDiedrico.add(new PointDiedrico(point2, point1));
+                                }
 
                                 points.remove(k);
                                 points.remove(j);
@@ -1047,6 +1057,8 @@ public class PicMenuActivity extends AppCompatActivity {
                 if(analyzerFinished){           //The analysis is ok so we pass to 3D, but before we have to differ from a line or a plane and then locate them
                     // in the space with trigonometry
 
+                    Log.i("asdf", "1: " + landLine.getLineXA() + " 2: " + landLine.getLineXB());
+
                     ArrayList<PointVector> pointVectors = new ArrayList<>();       //we pass the points to PointVector to know his X, his Y and his Z
                     for(int i = 0; i < pointDiedrico.size(); i++){
                         Vector AB = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(landLine.getLineXB(), landLine.getLineYB()));
@@ -1055,9 +1067,35 @@ public class PicMenuActivity extends AppCompatActivity {
                         ScalarProduct scalarProductForX = new ScalarProduct(AB, AD);
                         ScalarProduct scalarProductForY = new ScalarProduct(AB, AC);
 
-                        pointVectors.add(new PointVector((float)(scalarProductForY.getHeight() / AB.getModule()), (float)(scalarProductForX.getHeight() / AB.getModule()), (float)(scalarProductForY.getLength() / AB.getModule()) - 0.5f));
+                        pointVectors.add(new PointVector((float)(scalarProductForY.getHeight() / AB.getModule()), (float)(scalarProductForX.getHeight() / AB.getModule()), -(float)(scalarProductForY.getLength() / AB.getModule()) + 0.5f));
                     }
 
+                    ArrayList<LineVector> lineVectors = new ArrayList<>();
+                    ArrayList<PlaneVector> planeVectors = new ArrayList<>();
+                    for(int i = 0; i < lineDiedrico.size(); i++){
+                        //We have to differ from a line or a plane, the difference its that plane have one view very next from each other (this is only with crosswide planes but for the moment its OK)
+                        if(false){//lineDiedrico.get(0).getX().getLineXA() > lineDiedrico.get(0).getY().getLineXA() - 5 && lineDiedrico.get(0).getX().getLineXA() < lineDiedrico.get(0).getY().getLineXA() + 5 && lineDiedrico.get(0).getX().getLineYA() > lineDiedrico.get(0).getY().getLineYA() - 5 && lineDiedrico.get(0).getX().getLineYA() > lineDiedrico.get(0).getY().getLineYA() + 5){           //It seems to be a plane
+                            Log.i("asdf", "planooooo");
+                        }
+                        else{           //It seems to be a line
+                            Vector AB = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(landLine.getLineXB(), landLine.getLineYB()));
+                            Vector AC = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(lineDiedrico.get(i).getX().getLineXA(), lineDiedrico.get(i).getX().getLineYA()));
+                            Vector AD = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(lineDiedrico.get(i).getY().getLineXA(), lineDiedrico.get(i).getY().getLineYA()));
+                            Vector AE = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(lineDiedrico.get(i).getX().getLineXB(), lineDiedrico.get(i).getX().getLineYB()));
+                            Vector AF = new Vector(new PointVector(landLine.getLineXA(), landLine.getLineYA()), new PointVector(lineDiedrico.get(i).getY().getLineXB(), lineDiedrico.get(i).getY().getLineYB()));
+
+                            ScalarProduct scalarProductXA = new ScalarProduct(AB, AD);
+                            ScalarProduct scalarProductYA = new ScalarProduct(AB, AC);
+                            ScalarProduct scalarProductXB = new ScalarProduct(AB, AF);
+                            ScalarProduct scalarProductYB = new ScalarProduct(AB, AE);
+
+                            Log.i("asdf", "YA " + (float)(scalarProductYA.getHeight()/AB.getModule()) + " XA " + (float)(scalarProductXA.getHeight()/AB.getModule()) + " ZA " + (float)(scalarProductYA.getLength()/AB.getModule()) + " YB " + (float)(scalarProductYB.getHeight()/AB.getModule()) + " XB " + (float)(scalarProductXB.getHeight()/AB.getModule()) + " ZB " + (float)(scalarProductYB.getLength()/AB.getModule()));
+
+                            lineVectors.add(new LineVector((float)(scalarProductYA.getHeight()/AB.getModule()), (float)(scalarProductXA.getHeight()/AB.getModule()), -(float)(scalarProductYA.getLength()/AB.getModule()) + 0.5f,
+                                    (float)(scalarProductYB.getHeight()/AB.getModule()), (float)(scalarProductXB.getHeight()/AB.getModule()), -(float)(scalarProductYB.getLength()/AB.getModule()) + 0.5f));
+
+                        }
+                    }
                     /*
                     ArrayList<LineVector> lineVectors = new ArrayList<>();        //we pass the lines to PointVector to know his X, his Y and his Z
                     for(int i = 0; i < nLines; i ++){
@@ -1105,7 +1143,7 @@ public class PicMenuActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(getApplicationContext(), OpenGlActivity.class);              //we pass the vector to OpenGL
                     intent.putParcelableArrayListExtra("points", pointVectors);
-                    //intent.putParcelableArrayListExtra("lines", lineVectors);
+                    intent.putParcelableArrayListExtra("lines", lineVectors);
                     //intent.putParcelableArrayListExtra("planes", planeVectors);
 
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
