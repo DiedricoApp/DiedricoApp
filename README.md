@@ -30,7 +30,7 @@ El proyecto se divide en dos partes:
 <img src="Images/todoPSD.png" alt="all" height="330"> <img src="Images/todo3DPSD.png" alt="all" height="330"><br>
 
 ## ¿Dónde descargarla?
-La aplicación todavía está en proceso, aunque si eres muy impaciente puedes descargarte el proyecto y compilarlo en tu teléfono, o descargarte el binario de aquí.
+La aplicación todavía está en proceso, aunque si eres muy impaciente puedes descargarte el proyecto y compilarlo en tu teléfono, o descargarte el binario de [aquí](https://github.com/DiedricoApp/DiedricoApp/blob/master/DiedricoApp.apk?raw=true).
 
 ## Blog del proyecto
 Puedes seguir el avance de la aplicación en [diedrico.com](http://diedrico.com/)
