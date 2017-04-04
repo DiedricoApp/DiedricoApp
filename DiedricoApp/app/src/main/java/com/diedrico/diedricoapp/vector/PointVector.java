@@ -52,6 +52,14 @@ public class PointVector implements Parcelable {
         this.pointY = pointY;
     }
 
+    public PointVector getMidPoint(PointVector secondPoint){
+        float resultX = (this.pointX + secondPoint.getPointX())/2;
+        float resultY = (this.pointY + secondPoint.getPointY())/2;
+        float resultZ = (this.pointZ + secondPoint.getPointZ())/2;
+
+        return new PointVector(resultX, resultY, resultZ);
+    }
+
     public float getPointX() {
         return pointX;
     }
