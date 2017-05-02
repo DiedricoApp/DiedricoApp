@@ -93,15 +93,15 @@ public class DiedricoFragment extends Fragment {
     }
 
     public void setDiedrico(List<PointVector> pointVectors, List<LineVector> lineVectors, List<PlaneVector> planeVectors){
-        if(!pointVectors.isEmpty()){
+        if(pointVectors != null && !pointVectors.isEmpty()){
             this.createDiedrico.addDiedricoPoints(pointVectors);
         }
 
-        if(!lineVectors.isEmpty()){
+        if(lineVectors != null && !lineVectors.isEmpty()){
             this.createDiedrico.addDiedricoLines(lineVectors);
         }
 
-        if(!planeVectors.isEmpty()){
+        if(planeVectors != null && !planeVectors.isEmpty()){
             this.createDiedrico.addPlanes(planeVectors);
         }
     }
