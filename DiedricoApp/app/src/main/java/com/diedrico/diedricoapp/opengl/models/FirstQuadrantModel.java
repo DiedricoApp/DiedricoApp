@@ -18,7 +18,7 @@ glVertexPointer(3, GL_FLOAT, 0, 1erCuadranteVerts);
 glDrawArrays(GL_TRIANGLES, 0, 1erCuadranteNumVerts);
 */
 
-public class FirstQuadrantModel extends Model{
+public class FirstQuadrantModel implements Model{
   public static final int FirstQuadrantNumVerts = 1560;
 
   public static final float FirstQuadrantVerts [] = {
@@ -2104,9 +2104,13 @@ public class FirstQuadrantModel extends Model{
           -0.259099030337079f, 0.0384925606741575f, -6.88338275267597e-16f,
   };
 
-
-  public FirstQuadrantModel(){
-    super(FirstQuadrantNumVerts, FirstQuadrantVerts);
+  @Override
+  public int getNumVerts() {
+    return FirstQuadrantNumVerts;
   }
 
+  @Override
+  public float[] getVerts() {
+    return FirstQuadrantVerts;
+  }
 }

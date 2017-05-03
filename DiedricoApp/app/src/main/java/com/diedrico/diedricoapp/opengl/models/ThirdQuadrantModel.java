@@ -18,7 +18,7 @@ glVertexPointer(3, GL_FLOAT, 0, ThirdQuadrantModelVerts);
 glDrawArrays(GL_TRIANGLES, 0, ThirdQuadrantModelNumVerts);
 */
 
-public class ThirdQuadrantModel extends Model{
+public class ThirdQuadrantModel implements Model{
   public static final int ThirdQuadrantModelNumVerts = 1989;
 
   public static final float ThirdQuadrantModelVerts [] = {
@@ -2676,8 +2676,13 @@ public class ThirdQuadrantModel extends Model{
     -0.214962841506647f, -0.0315619016248151f, -7.54951656745107e-16f,
   };
 
-  public ThirdQuadrantModel(){
-    super(ThirdQuadrantModelNumVerts, ThirdQuadrantModelVerts);
+  @Override
+  public int getNumVerts() {
+    return ThirdQuadrantModelNumVerts;
   }
 
+  @Override
+  public float[] getVerts() {
+    return ThirdQuadrantModelVerts;
+  }
 }

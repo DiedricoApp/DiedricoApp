@@ -18,7 +18,7 @@ glVertexPointer(3, GL_FLOAT, 0, AlejamientoModelVerts);
 glDrawArrays(GL_TRIANGLES, 0, AlejamientoModelNumVerts);
 */
 
-public class AlejamientoModel extends Model{
+public class AlejamientoModel implements Model{
   public static final int AlejamientoModelNumVerts = 2451;
 
   public static final float AlejamientoModelVerts [] = {
@@ -3292,8 +3292,13 @@ public class AlejamientoModel extends Model{
     -0.319673088475391f, -0.0089209955582233f, 0f,
   };
 
-  public AlejamientoModel(){
-    super(AlejamientoModelNumVerts, AlejamientoModelVerts);
+  @Override
+  public int getNumVerts() {
+    return AlejamientoModelNumVerts;
   }
 
+  @Override
+  public float[] getVerts() {
+    return AlejamientoModelVerts;
+  }
 }

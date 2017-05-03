@@ -18,7 +18,7 @@ glVertexPointer(3, GL_FLOAT, 0, CotaModelVerts);
 glDrawArrays(GL_TRIANGLES, 0, CotaModelNumVerts);
 */
 
-public class CotaModel extends Model{
+public class CotaModel implements Model{
   public static final int CotaModelNumVerts = 1266;
 
   public static final float CotaModelVerts [] = {
@@ -1712,8 +1712,13 @@ public class CotaModel extends Model{
     -0.156194342723005f, -0.0433145845070422f, 0f,
   };
 
-  public CotaModel(){
-    super(CotaModelNumVerts, CotaModelVerts);
+  @Override
+  public int getNumVerts() {
+    return CotaModelNumVerts;
   }
 
+  @Override
+  public float[] getVerts() {
+    return CotaModelVerts;
+  }
 }
