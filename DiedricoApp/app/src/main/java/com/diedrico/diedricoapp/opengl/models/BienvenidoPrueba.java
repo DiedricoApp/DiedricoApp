@@ -3,7 +3,7 @@ package com.diedrico.diedricoapp.opengl.models;
 /**
  * Created by amil101 on 27/05/16.
  */
-public class BienvenidoPrueba extends Model{
+public class BienvenidoPrueba implements Model{
     public static final int cubeVertsCount = 8364;
     public static final float cubeVerts [] = {
             // f 11//1 1//1 12//1
@@ -2072,8 +2072,13 @@ public class BienvenidoPrueba extends Model{
             0.477448963962613f, -0.0490794858288616f, -0.010428433636895f,
     };
 
-        public BienvenidoPrueba(){
-                super(cubeVertsCount, cubeVerts);
-        }
+    @Override
+    public int getNumVerts() {
+        return cubeVertsCount;
+    }
 
+    @Override
+    public float[] getVerts() {
+        return cubeVerts;
+    }
 }
