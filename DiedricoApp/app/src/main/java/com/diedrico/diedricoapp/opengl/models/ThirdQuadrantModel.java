@@ -18,7 +18,11 @@ glVertexPointer(3, GL_FLOAT, 0, ThirdQuadrantModelVerts);
 glDrawArrays(GL_TRIANGLES, 0, ThirdQuadrantModelNumVerts);
 */
 
+import com.diedrico.diedricoapp.vector.PointVector;
+
 public class ThirdQuadrantModel implements Model{
+  private PointVector coords;
+
   public static final int ThirdQuadrantModelNumVerts = 1989;
 
   public static final float ThirdQuadrantModelVerts [] = {
@@ -2675,6 +2679,16 @@ public class ThirdQuadrantModel implements Model{
     -0.212597141506647f, -0.0316772016248151f, -7.54951656745107e-16f,
     -0.214962841506647f, -0.0315619016248151f, -7.54951656745107e-16f,
   };
+
+  public ThirdQuadrantModel(PointVector pointVector){
+    this.coords = pointVector;
+  }
+
+  @Override
+  public PointVector getCoords() {
+    return coords;
+  }
+
 
   @Override
   public int getNumVerts() {

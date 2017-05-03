@@ -18,7 +18,10 @@ glVertexPointer(3, GL_FLOAT, 0, AlejamientoModelVerts);
 glDrawArrays(GL_TRIANGLES, 0, AlejamientoModelNumVerts);
 */
 
+import com.diedrico.diedricoapp.vector.PointVector;
+
 public class AlejamientoModel implements Model{
+  private PointVector coords;
   public static final int AlejamientoModelNumVerts = 2451;
 
   public static final float AlejamientoModelVerts [] = {
@@ -3291,6 +3294,15 @@ public class AlejamientoModel implements Model{
     -0.291023088475391f, -0.0390709955582233f, 0f,
     -0.319673088475391f, -0.0089209955582233f, 0f,
   };
+
+  public AlejamientoModel(PointVector pointVector){
+    this.coords = pointVector;
+  }
+
+  @Override
+  public PointVector getCoords() {
+    return coords;
+  }
 
   @Override
   public int getNumVerts() {

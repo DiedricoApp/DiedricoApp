@@ -3,6 +3,7 @@ package com.diedrico.diedricoapp.opengl.models;
 import android.opengl.GLES20;
 
 import com.diedrico.diedricoapp.opengl.MyGLRenderer;
+import com.diedrico.diedricoapp.vector.PointVector;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -48,10 +49,14 @@ public class ImportModel {
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
 
+    private PointVector modelCoords;
+
     // Set color with red, green, blue and alpha (opacity) values
     float color[] = { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
 
     public ImportModel(Model model) {
+        this.modelCoords = model.getCoords();
+
         vertexCount = model.getVerts().length / COORDS_PER_VERTEX;
         vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
@@ -118,5 +123,9 @@ public class ImportModel {
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(mPositionHandle);
+    }
+
+    public PointVector getModelCoords() {
+        return modelCoords;
     }
 }

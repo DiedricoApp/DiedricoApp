@@ -18,7 +18,11 @@ glVertexPointer(3, GL_FLOAT, 0, SecondQuadrantModelVerts);
 glDrawArrays(GL_TRIANGLES, 0, SecondQuadrantModelNumVerts);
 */
 
+import com.diedrico.diedricoapp.vector.PointVector;
+
 public class SecondQuadrantModel implements Model{
+  private PointVector coords;
+
   public static final int SecondQuadrantModelNumVerts = 1647;
 
   public static final float SecondQuadrantModelVerts [] = {
@@ -2219,6 +2223,16 @@ public class SecondQuadrantModel implements Model{
     -0.184315824064171f, -0.0370754443850265f, -7.105427357601e-16f,
     -0.227515824064171f, -0.0363754443850265f, -7.105427357601e-16f,
   };
+
+  public SecondQuadrantModel(PointVector pointVector){
+    this.coords = pointVector;
+  }
+
+  @Override
+  public PointVector getCoords() {
+    return coords;
+  }
+
 
   @Override
   public int getNumVerts() {

@@ -18,7 +18,11 @@ glVertexPointer(3, GL_FLOAT, 0, FourthQuadrantModelVerts);
 glDrawArrays(GL_TRIANGLES, 0, FourthQuadrantModelNumVerts);
 */
 
+import com.diedrico.diedricoapp.vector.PointVector;
+
 public class FourthQuadrantModel implements Model{
+  private PointVector coords;
+
   public static final int FourthQuadrantModelNumVerts = 1431;
 
   public static final float FourthQuadrantModelVerts [] = {
@@ -1931,6 +1935,15 @@ public class FourthQuadrantModel implements Model{
     -0.222755861190966f, -0.0355190006160161f, -6.66133814775094e-16f,
     -0.222755861190966f, -0.0131190006160161f, -6.66133814775094e-16f,
   };
+
+  public FourthQuadrantModel(PointVector pointVector){
+    this.coords = pointVector;
+  }
+
+  @Override
+  public PointVector getCoords() {
+    return coords;
+  }
 
   @Override
   public int getNumVerts() {

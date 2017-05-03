@@ -1,9 +1,12 @@
 package com.diedrico.diedricoapp.opengl.models;
 
+import com.diedrico.diedricoapp.vector.PointVector;
+
 /**
  * Created by amil101 on 27/05/16.
  */
 public class BienvenidoPrueba implements Model{
+    private PointVector coords;
     public static final int cubeVertsCount = 8364;
     public static final float cubeVerts [] = {
             // f 11//1 1//1 12//1
@@ -2071,6 +2074,15 @@ public class BienvenidoPrueba implements Model{
             0.502731729173146f, -0.0427485428457038f, 0.010428433636895f,
             0.477448963962613f, -0.0490794858288616f, -0.010428433636895f,
     };
+
+    public BienvenidoPrueba(PointVector pointVector){
+        this.coords = pointVector;
+    }
+
+    @Override
+    public PointVector getCoords() {
+        return coords;
+    }
 
     @Override
     public int getNumVerts() {
