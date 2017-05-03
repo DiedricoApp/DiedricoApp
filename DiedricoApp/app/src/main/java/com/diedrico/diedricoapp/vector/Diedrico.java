@@ -19,6 +19,8 @@
 package com.diedrico.diedricoapp.vector;
 
 import com.diedrico.diedricoapp.opengl.models.Model;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +37,15 @@ public class Diedrico {
         this.lines = lines;
         this.planes = planes;
         this.models = models;
+    }
+
+    public Diedrico(List<PointVector> points, List<LineVector> lines, List<PlaneVector> planes, Model model){
+        this.points = points;
+        this.lines = lines;
+        this.planes = planes;
+
+        this.models = new ArrayList<>();
+        this.models.add(model);
     }
 
     public List<PointVector> getPoints(){
