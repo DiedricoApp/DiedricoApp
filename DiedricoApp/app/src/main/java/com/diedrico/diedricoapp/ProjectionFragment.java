@@ -48,7 +48,7 @@ import java.util.List;
 public class ProjectionFragment extends Fragment {
 
     private GLSurfaceView mGLView;          //SurfaceView of OpenGL
-    MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
+    MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null, null));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
 
     LinearLayout layoutForGL;
 
@@ -100,7 +100,7 @@ public class ProjectionFragment extends Fragment {
             List<LineVector> comingLineVectors = extras.getParcelableArrayList("lineVectors");
             List<PlaneVector> comingPlaneVectors = extras.getParcelableArrayList("planeVectors");
 
-            Diedrico diedrico = new Diedrico(comingPointVectors, comingLineVectors, comingPlaneVectors);       //To put the renderer with the points lines and planes (OpenGL)
+            Diedrico diedrico = new Diedrico(comingPointVectors, comingLineVectors, comingPlaneVectors, null);       //To put the renderer with the points lines and planes (OpenGL)
 
             mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(diedrico));
         }

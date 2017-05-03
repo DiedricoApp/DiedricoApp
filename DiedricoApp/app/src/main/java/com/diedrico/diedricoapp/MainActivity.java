@@ -38,6 +38,11 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.diedrico.diedricoapp.opengl.MyGLRenderer;
+import com.diedrico.diedricoapp.opengl.models.FirstQuadrantModel;
+import com.diedrico.diedricoapp.opengl.models.FourthQuadrantModel;
+import com.diedrico.diedricoapp.opengl.models.Model;
+import com.diedrico.diedricoapp.opengl.models.SecondQuadrantModel;
+import com.diedrico.diedricoapp.opengl.models.ThirdQuadrantModel;
 import com.diedrico.diedricoapp.vector.Diedrico;
 import com.diedrico.diedricoapp.vector.PointVector;
 import com.diedrico.diedricoapp.vector.LineVector;
@@ -145,6 +150,7 @@ public class MainActivity extends AppCompatActivity{
                 List<PointVector> pointVectors = new ArrayList<>();
                 List<LineVector> lineVectors = new ArrayList<>();
                 List<PlaneVector> planeVectors = new ArrayList<>();
+                List<Model> models = new ArrayList<>();
 
                 switch(groupPosition){
                     case 0:
@@ -154,6 +160,11 @@ public class MainActivity extends AppCompatActivity{
                                 break;
                             case 1:     //the user pressed components of diedrico
                                 explanationFragment.setExplanation(R.string.components, R.string.edges);
+                                models.add(new FirstQuadrantModel());
+                                //models.add((SecondQuadrantModel) null);
+                                //models.add((ThirdQuadrantModel) null);
+                                //models.add((FourthQuadrantModel) null);
+
                                 break;
                             case 2:     //the user pressed edges
                                 explanationFragment.setExplanation(R.string.edges, R.string.firtstext);
@@ -267,7 +278,7 @@ public class MainActivity extends AppCompatActivity{
                         break;
                 }
 
-                diedrico = new Diedrico(pointVectors, lineVectors, planeVectors);       //To put the renderer with the points lines and planes (OpenGL)
+                diedrico = new Diedrico(pointVectors, lineVectors, planeVectors, models);       //To put the renderer with the points lines and planes (OpenGL)
 
                 projectionFragment.changeRenderer(new MyGLRenderer(diedrico));
                 projectionFragment.newInstance();

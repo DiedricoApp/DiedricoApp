@@ -42,7 +42,7 @@ import java.util.List;
 public class OpenGlActivity extends Activity {
 
     private GLSurfaceView mGLView;
-    MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
+    MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null, null));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
 
     List<PointVector> pointVectors;
     List<LineVector> lineVectors;
@@ -71,7 +71,7 @@ public class OpenGlActivity extends Activity {
         threadTime();               //start the thread, for rotate the camera if the user don't press the screen
         pressed = false;
 
-        Diedrico diedrico = new Diedrico(pointVectors, lineVectors, planeVectors);       //To put the renderer with the points lines and planes (OpenGL)
+        Diedrico diedrico = new Diedrico(pointVectors, lineVectors, planeVectors, null);       //To put the renderer with the points lines and planes (OpenGL)
 
         mGLView = new MyGLSurfaceView(this, new MyGLRenderer(diedrico));
         mGLView.setOnTouchListener(listenerForCamera());
