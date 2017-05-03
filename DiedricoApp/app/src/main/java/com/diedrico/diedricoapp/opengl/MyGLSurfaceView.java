@@ -21,7 +21,10 @@ package com.diedrico.diedricoapp.opengl;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
+import com.diedrico.diedricoapp.opengl.models.Model;
 import com.diedrico.diedricoapp.vector.Diedrico;
+
+import java.util.List;
 
 /**
  * Created by amil101 on 23/04/16.
@@ -39,7 +42,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         //fix for error No Config chosen, but I don't know what this does.
         super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new MyGLRenderer(new Diedrico(null, null, null, null));
+        mRenderer = new MyGLRenderer(new Diedrico(null, null, null, (List<Model>) null));
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
