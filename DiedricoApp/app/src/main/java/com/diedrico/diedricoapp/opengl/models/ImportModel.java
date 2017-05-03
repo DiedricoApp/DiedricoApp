@@ -52,7 +52,6 @@ public class ImportModel {
     float color[] = { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
 
     public ImportModel(Model model) {
-
         vertexCount = model.getVerts().length / COORDS_PER_VERTEX;
         vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
