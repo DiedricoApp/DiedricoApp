@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity{
                                 break;
                             case 1:     //the user pressed components of diedrico
                                 explanationFragment.setExplanation(R.string.components, R.string.edges);
-                                models.add(new FirstQuadrantModel());
+                                models.add(new FirstQuadrantModel(new PointVector(1.0f, 1.0f, -0.5f)));
                                 //models.add((SecondQuadrantModel) null);
                                 //models.add((ThirdQuadrantModel) null);
                                 //models.add((FourthQuadrantModel) null);

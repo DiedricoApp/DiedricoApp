@@ -204,8 +204,13 @@ public class MyGLRenderer extends MyGLRendererCamera {
         for(int i = 0; i < planes.size(); i++)
             planes.get(i).draw(scratch);
 
-        for(int i = 0; i < importedModels.size(); i++)
-            importedModels.get(i).draw(scratch);
+        for(int i = 0; i < importedModels.size(); i++) {
+            Matrix.setIdentityM(mTranslationMatrix, 0);
+            Matrix.translateM(mTranslationMatrix, 0, importedModels.get(i).getModelCoords().getPointX(), importedModels.get(i).getModelCoords().getPointY(), importedModels.get(i).getModelCoords().getPointZ());
+            Matrix.multiplyMM(mTranslationMatrix, 0, scratch, 0, mTranslationMatrix, 0);
+
+            importedModels.get(i).draw(mTranslationMatrix);
+        }
     }
 
     public static int loadShader(int type, String shaderCode){
