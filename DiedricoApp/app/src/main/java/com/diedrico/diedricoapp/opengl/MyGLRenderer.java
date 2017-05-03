@@ -24,6 +24,7 @@ import android.os.SystemClock;
 
 import com.diedrico.diedricoapp.opengl.models.Axis;
 import com.diedrico.diedricoapp.opengl.models.GLPoint;
+import com.diedrico.diedricoapp.opengl.models.ImportModel;
 import com.diedrico.diedricoapp.opengl.models.Line;
 import com.diedrico.diedricoapp.opengl.models.ProyectionPlane;
 
@@ -73,7 +74,7 @@ public class MyGLRenderer extends MyGLRendererCamera {
 
     List<Line> lines = new ArrayList<>();
     List<ProyectionPlane> planes = new ArrayList<>();
-    //List<ImportModel> models = new ArrayList<>();
+    List<ImportModel> importedModels = new ArrayList<>();
 
     public MyGLRenderer(Diedrico diedrico){
         this.diedrico = diedrico;
@@ -81,9 +82,11 @@ public class MyGLRenderer extends MyGLRendererCamera {
         /*
         if(diedrico.getModels() != null){
             for(int i = 0; i < diedrico.getModels().size(); i++){
-                models.add(diedrico.getModels().get(i));
+                importedModels.add(diedrico.getModels().get(i));
             }
-        }*/
+        }
+
+        */
     }
 
     @Override
@@ -113,6 +116,12 @@ public class MyGLRenderer extends MyGLRendererCamera {
         if(diedrico.getPlanes() != null){
             for(int i = 0; i < diedrico.getPlanes().size(); i++){
                 planes.add(new ProyectionPlane(diedrico.getPlanes().get(i)));
+            }
+        }
+
+        if(diedrico.getModels() != null){
+            for(int i = 0; i < diedrico.getModels().size(); i++){
+                importedModels.add(new ImportModel(diedrico.getModels().get(i)));
             }
         }
     }
@@ -194,6 +203,9 @@ public class MyGLRenderer extends MyGLRendererCamera {
 
         for(int i = 0; i < planes.size(); i++)
             planes.get(i).draw(scratch);
+
+        for(int i = 0; i < importedModels.size(); i++)
+            importedModels.get(i).draw(scratch);
     }
 
     public static int loadShader(int type, String shaderCode){
