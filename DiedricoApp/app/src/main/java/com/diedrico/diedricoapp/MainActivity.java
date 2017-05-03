@@ -38,6 +38,7 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.diedrico.diedricoapp.opengl.MyGLRenderer;
+import com.diedrico.diedricoapp.opengl.models.BienvenidoModel;
 import com.diedrico.diedricoapp.opengl.models.FirstQuadrantModel;
 import com.diedrico.diedricoapp.opengl.models.FourthQuadrantModel;
 import com.diedrico.diedricoapp.opengl.models.Model;
@@ -157,13 +158,15 @@ public class MainActivity extends AppCompatActivity{
                         switch (childPosition){
                             case 0:     //The user pressed welcome
                                 explanationFragment.setExplanation(R.string.welcome, R.string.firtstext);
+                                models.add(new BienvenidoModel(new PointVector(0.5f, 0.5f, 0.0f)));
+
                                 break;
                             case 1:     //the user pressed components of diedrico
                                 explanationFragment.setExplanation(R.string.components, R.string.edges);
                                 models.add(new FirstQuadrantModel(new PointVector(1.0f, 1.0f, -0.5f)));
-                                //models.add((SecondQuadrantModel) null);
-                                //models.add((ThirdQuadrantModel) null);
-                                //models.add((FourthQuadrantModel) null);
+                                models.add(new SecondQuadrantModel(new PointVector(-1.0f, 1.0f, -0.5f)));
+                                models.add(new ThirdQuadrantModel(new PointVector(-1.0f, -1.0f, -0.5f)));
+                                models.add(new FourthQuadrantModel(new PointVector(1.0f, -1.0f, -0.5f)));
 
                                 break;
                             case 2:     //the user pressed edges
