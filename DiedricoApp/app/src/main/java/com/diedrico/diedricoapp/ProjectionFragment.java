@@ -34,11 +34,14 @@ import android.widget.ListView;
 import com.diedrico.diedricoapp.opengl.MyGLRenderer;
 import com.diedrico.diedricoapp.opengl.MyGLRendererCamera;
 import com.diedrico.diedricoapp.opengl.MyGLSurfaceView;
+import com.diedrico.diedricoapp.opengl.models.BienvenidoModel;
+import com.diedrico.diedricoapp.opengl.models.Model;
 import com.diedrico.diedricoapp.vector.Diedrico;
 import com.diedrico.diedricoapp.vector.LineVector;
 import com.diedrico.diedricoapp.vector.PlaneVector;
 import com.diedrico.diedricoapp.vector.PointVector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,7 +51,7 @@ import java.util.List;
 public class ProjectionFragment extends Fragment {
 
     private GLSurfaceView mGLView;          //SurfaceView of OpenGL
-    MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null, null));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
+    MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null, (List<Model>) null));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
 
     LinearLayout layoutForGL;
 
@@ -93,14 +96,14 @@ public class ProjectionFragment extends Fragment {
 
         Bundle extras = getActivity().getIntent().getExtras();
         if(extras == null) {
-            mGLView = new MyGLSurfaceView(getContext(), renderer);
+            mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(new Diedrico(null, null, null, new BienvenidoModel(new PointVector(0.5f, 0.5f, 0.0f)))));
         }
         else{
             List<PointVector> comingPointVectors = extras.getParcelableArrayList("pointVectors");
             List<LineVector> comingLineVectors = extras.getParcelableArrayList("lineVectors");
             List<PlaneVector> comingPlaneVectors = extras.getParcelableArrayList("planeVectors");
 
-            Diedrico diedrico = new Diedrico(comingPointVectors, comingLineVectors, comingPlaneVectors, null);       //To put the renderer with the points lines and planes (OpenGL)
+            Diedrico diedrico = new Diedrico(comingPointVectors, comingLineVectors, comingPlaneVectors, (List<Model>) null);       //To put the renderer with the points lines and planes (OpenGL)
 
             mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(diedrico));
         }
