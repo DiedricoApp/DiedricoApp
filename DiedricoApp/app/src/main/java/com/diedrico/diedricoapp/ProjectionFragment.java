@@ -95,10 +95,7 @@ public class ProjectionFragment extends Fragment {
         layoutForGL = (LinearLayout) view.findViewById(R.id.layoutForSurfaceViewtabs);
 
         Bundle extras = getActivity().getIntent().getExtras();
-        if(extras == null) {
-            mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(new Diedrico(null, null, null, new BienvenidoModel(new PointVector(0.5f, 0.5f, 0.0f)))));
-        }
-        else{
+        if(extras != null && extras.getParcelableArrayList("pointVectors") != null) {
             List<PointVector> comingPointVectors = extras.getParcelableArrayList("pointVectors");
             List<LineVector> comingLineVectors = extras.getParcelableArrayList("lineVectors");
             List<PlaneVector> comingPlaneVectors = extras.getParcelableArrayList("planeVectors");
@@ -106,6 +103,9 @@ public class ProjectionFragment extends Fragment {
             Diedrico diedrico = new Diedrico(comingPointVectors, comingLineVectors, comingPlaneVectors, (List<Model>) null);       //To put the renderer with the points lines and planes (OpenGL)
 
             mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(diedrico));
+        }
+        else{
+            mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(new Diedrico(null, null, null, new BienvenidoModel(new PointVector(0.5f, 0.5f, 0.0f)))));
         }
 
         threadTime();               //start the thread, for rotate the camera if the user don't press the screen
