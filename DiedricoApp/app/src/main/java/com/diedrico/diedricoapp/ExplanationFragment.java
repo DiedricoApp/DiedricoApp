@@ -55,14 +55,17 @@ public class ExplanationFragment extends Fragment {
         textViewTitle = (TextView) view.findViewById(R.id.explanationTitle);
         textViewExplanation = (TextView) view.findViewById(R.id.explanationText);
 
+
+        //If there is a coming intent (from MenuPicActivity) we have to catch it and put the content
         Bundle extras = getActivity().getIntent().getExtras();
-        if(extras == null) {
-            textViewTitle.setText(title);
-            textViewExplanation.setText(explanation);
-        }
-        else{
+
+        if(extras != null && extras.getInt("title") != 0 && extras.getInt("explanation") != 0) {
             textViewTitle.setText(extras.getInt("title"));
             textViewExplanation.setText(extras.getInt("explanation"));
+        }
+        else{
+            textViewTitle.setText(title);
+            textViewExplanation.setText(explanation);
         }
             return view;
     }
