@@ -51,7 +51,7 @@ import java.util.List;
 public class ProjectionFragment extends Fragment {
 
     private GLSurfaceView mGLView;          //SurfaceView of OpenGL
-    MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null, (List<Model>) null));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
+    MyGLRendererCamera renderer = new MyGLRenderer(new Diedrico(null, null, null, new BienvenidoModel(new PointVector(0.5f, 0.5f, 0.0f))));            //The main renderer, it has to be initialized because the fragment can die. With changeRenderer we will change the renderer
 
     LinearLayout layoutForGL;
 
@@ -105,7 +105,7 @@ public class ProjectionFragment extends Fragment {
             mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(diedrico));
         }
         else{
-            mGLView = new MyGLSurfaceView(getContext(), new MyGLRenderer(new Diedrico(null, null, null, new BienvenidoModel(new PointVector(0.5f, 0.5f, 0.0f)))));
+            mGLView = new MyGLSurfaceView(getContext(), renderer);
         }
 
         threadTime();               //start the thread, for rotate the camera if the user don't press the screen
